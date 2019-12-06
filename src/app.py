@@ -44,7 +44,7 @@ def roll(update, context):
 
 
 def bark(update, context):
-    resp_text = ["월월!", "멍멍!", "컹컹!"]
+    resp_text = random.sample(["월월!", "멍멍!", "컹컹!"], 1)[0]
     context.bot.send_message(chat_id=update.effective_chat.id, text=resp_text,
                              reply_to_message_id=update.message.message_id)
 
