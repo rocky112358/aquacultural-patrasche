@@ -43,17 +43,34 @@ def roll(update, context):
                              reply_to_message_id=update.message.message_id)
 
 
+def _get_random_bark():
+    res = [random.sample(["월월!", "멍멍!", "컹컹!"], 1)[0]] * 99 + ["야옹"]  # 1% chance of meow
+    return random.sample(res, 1)[0]
+
+
 def bark(update, context):
-    resp_text = random.sample(["월월!", "멍멍!", "컹컹!"], 1)[0]
+    resp_text = _get_random_bark()
     context.bot.send_message(chat_id=update.effective_chat.id, text=resp_text,
                              reply_to_message_id=update.message.message_id)
 
 
+def up(update, context):
+    resp_text = f".\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n" \
+                "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n{_get_random_bark()}"
+    context.bot.send_message(chat_id=update.effective_chat.id, text=resp_text,
+                             reply_to_message_id=update.message.message_id)
+
+
+# handlers
 start_handler = CommandHandler('start', start)
 roll_handler = CommandHandler('roll', roll)
 bark_handler = CommandHandler('bark', bark)
+up_handler = CommandHandler('up', up)
+
+# dispatchers
 dispatcher.add_handler(start_handler)
 dispatcher.add_handler(roll_handler)
 dispatcher.add_handler(bark_handler)
+dispatcher.add_handler(up_handler)
 
 updater.start_polling()
