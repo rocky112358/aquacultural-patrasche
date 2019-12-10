@@ -66,6 +66,8 @@ def vs(update, context):
         return  # no answer for trolls
     vs_string = " ".join(context.args)
     vs_list = list(map(lambda x: x.strip(), vs_string.split("/")))
+    if len(vs_list) == 1:
+        return  # no answer for trolls
     if any([len(x) == 0 for x in vs_list]):
         return  # no answer for trolls
     resp_text = random.sample(vs_list, 1)[0]
