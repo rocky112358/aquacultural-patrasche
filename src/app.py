@@ -75,6 +75,10 @@ def vs(update, context):
                              reply_to_message_id=update.message.message_id)
 
 
+def err_handler(update, context):
+    return
+
+
 # handlers
 start_handler = CommandHandler('start', start)
 roll_handler = CommandHandler('roll', roll)
@@ -82,11 +86,14 @@ bark_handler = CommandHandler('bark', bark)
 up_handler = CommandHandler('up', up)
 vs_handler = CommandHandler('vs', vs)
 
-# dispatchers
+# add handlers to dispatcher
 dispatcher.add_handler(start_handler)
 dispatcher.add_handler(roll_handler)
 dispatcher.add_handler(bark_handler)
 dispatcher.add_handler(up_handler)
 dispatcher.add_handler(vs_handler)
+
+# add an error handler to dispatcher
+dispatcher.add_error_handler(err_handler)
 
 updater.start_polling()
