@@ -56,7 +56,9 @@ def bark(update, context):
 
 def up(update, context):
     resp_text = f".\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n" \
-                "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n{_get_random_bark()}"
+                f"\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n{_get_random_bark()}"
+    context.bot.send_message(chat_id=update.effective_chat.id, text=resp_text,
+                             reply_to_message_id=update.message.message_id)
     context.bot.send_message(chat_id=update.effective_chat.id, text=resp_text,
                              reply_to_message_id=update.message.message_id)
 
