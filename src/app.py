@@ -13,6 +13,7 @@ updater = Updater(token=TELEGRAM_API_TOKEN, use_context=True)
 dispatcher = updater.dispatcher
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
+logging.info("bot start")
 
 
 def start(update, context):
