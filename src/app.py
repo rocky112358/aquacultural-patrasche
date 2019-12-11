@@ -92,6 +92,18 @@ dispatcher.add_handler(bark_handler)
 dispatcher.add_handler(up_handler)
 dispatcher.add_handler(vs_handler)
 
+
+# help command
+def help_(update, context):
+    a = [each.command[0] for each in dispatcher.handlers[0]]
+    resp_text = ", ".join(a)
+    context.bot.send_message(chat_id=update.effective_chat.id, text=resp_text,
+                             reply_to_message_id=update.message.message_id)
+
+
+help_handler = CommandHandler('help', help_)
+dispatcher.add_handler(help_handler)
+
 # add an error handler to dispatcher
 dispatcher.add_error_handler(err_handler)
 
