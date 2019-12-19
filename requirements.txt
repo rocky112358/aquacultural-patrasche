@@ -1,1 +1,3 @@
 python-telegram-bot==12.2.0
+sqlalchemy==1.3.12
+telethon==1.10.9

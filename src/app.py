@@ -5,6 +5,7 @@ import random
 from telegram.ext import Updater, CommandHandler
 
 TELEGRAM_API_TOKEN = os.getenv('TELEGRAM_API_TOKEN')
+from src.game import PatrascheCoin
 if TELEGRAM_API_TOKEN is None:
     print("ERROR: Set TELEGRAM_API_TOKEN")
     exit(1)
@@ -42,17 +43,6 @@ def roll(update, context):
                              reply_to_message_id=update.message.message_id)
 
 
-def _get_random_bark():
-    res = [random.sample(["월월!", "멍멍!", "컹컹!"], 1)[0]] * 99 + ["야옹"]  # 1% chance of meow
-    return random.sample(res, 1)[0]
-
-
-def bark(update, context):
-    resp_text = _get_random_bark()
-    context.bot.send_message(chat_id=update.effective_chat.id, text=resp_text,
-                             reply_to_message_id=update.message.message_id)
-
-
 def up(update, context):
     resp_text = f".\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n" \
                 f"\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n{_get_random_bark()}"
@@ -78,11 +68,14 @@ def err_handler(update, context):
     return
 
 
+# patrasche coin
+patrasche_coin = PatrascheCoin()
+
 # handlers
 start_handler = CommandHandler('start', start)
 roll_handler = CommandHandler('roll', roll)
 r_handler = CommandHandler('r', roll)
-bark_handler = CommandHandler('bark', bark)
+bark_handler = CommandHandler('bark', patrasche_coin.bark)
 up_handler = CommandHandler('up', up)
 vs_handler = CommandHandler('vs', vs)
 
