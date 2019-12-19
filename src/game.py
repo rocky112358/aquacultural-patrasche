@@ -1,9 +1,9 @@
-import os, time
+import os
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from src.telegram_client import get_online_users
+from telegram_client import get_online_users
 
 
 class PatrascheCoin:
