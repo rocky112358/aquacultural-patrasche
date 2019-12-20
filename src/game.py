@@ -17,9 +17,11 @@ class PatrascheCoin:
 
     @staticmethod
     def _get_random_bark():
-        res = [["월월!", "멍멍!", "컹컹!", "파트라슈는 안전자산!"][ord(os.urandom(1)) % 4]] * 250 \
+        res = [["월월!", "멍멍!", "컹컹!"][ord(os.urandom(1)) % 3]] * 178 \
+              + ["파트라슈는 안전자산!"] * 64 \
+              + ["크르릉..."] * 8 \
               + ["옹야"] * 3 \
-              + ["야옹"] * 3  # 1.171875% chance of 야옹
+              + ["야옹"] * 3  # 25% chance of free bark, 3.125% change of cost*1.5, 1.171875% chance of 야옹
 
         return res[ord(os.urandom(1))]
 
@@ -33,6 +35,13 @@ class PatrascheCoin:
             if (current_user.balance - BARK_COST) < 0:
                 context.bot.send_message(chat_id=update.effective_chat.id,
                                          text=f"check your balance",
+                                         reply_to_message_id=update.message.message_id)
+                return
+
+            # free bark
+            if bark == "파트라슈는 안전자산!":
+                context.bot.send_message(chat_id=update.effective_chat.id,
+                                         text=resp_text,
                                          reply_to_message_id=update.message.message_id)
                 return
 
@@ -51,6 +60,12 @@ class PatrascheCoin:
                 mining_user = self.session.query(User).filter(User.id == str(user_id)).one()
                 mining_user.balance += BARK_COST / len(online_users)
                 self.session.add(mining_user)
+
+            # additional cost
+            if bark == "크르릉...":
+                patrasche = self.session.query(User).filter(User.id == "patrasche").one()
+                current_user.balance -= BARK_COST / 2
+                patrasche.balance += BARK_COST / 2
 
             # check if 야옹
             if bark == "야옹":
