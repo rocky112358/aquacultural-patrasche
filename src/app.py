@@ -65,6 +65,20 @@ def vs(update, context):
                              reply_to_message_id=update.message.message_id)
 
 
+def patrasche_coin_help(update, context):
+    help_text = """
+    1 bark = 63PTC 소비
+    채굴: bark 시 online 상태인 다른유저와 파트라슈가 63PTC를 1/n로 나눠가짐
+    <확률표>
+    월월!, 멍멍!, 컹컹! (69.53125%)
+    파트라슈는 안전자산! (25%): 63PTC 반환, 채굴 없음
+    크르릉... (3.125%): 파트라슈가 31.5PTC 추가 징수
+    옹야 (1.171875%)
+    야옹 (1.171875%): 야옹 카운트 +1, 파트라슈 잔고의 절반 획득
+    """
+    context.bot.send_message(chat_id=update.effective_chat.id, text=help_text,
+                             reply_to_message_id=update.message.message_id)
+
 def err_handler(update, context):
     logger.warning('Update "%s" caused error "%s"', update, context.error)
 
@@ -79,6 +93,7 @@ r_handler = CommandHandler('r', roll)
 bark_handler = CommandHandler('bark', patrasche_coin.bark)
 up_handler = CommandHandler('up', up)
 vs_handler = CommandHandler('vs', vs)
+ptchelp_handler = CommandHandler('ptchelp', patrasche_coin_help)
 
 # add handlers to dispatcher
 dispatcher.add_handler(start_handler)
@@ -87,6 +102,7 @@ dispatcher.add_handler(r_handler)
 dispatcher.add_handler(bark_handler)
 dispatcher.add_handler(up_handler)
 dispatcher.add_handler(vs_handler)
+dispatcher.add_handler(ptchelp_handler)
 
 
 # help command
