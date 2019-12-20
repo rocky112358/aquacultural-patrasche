@@ -57,6 +57,7 @@ class PatrascheCoin:
                 patrasche = self.session.query(User).filter(User.id == "patrasche").one()
                 patrasche.balance = patrasche.balance / 2
                 current_user.balance += patrasche.balance / 2
+                current_user.meow_count += 1
                 resp_text += f"\nReward: {patrasche.balance / 2}PTC"
 
             self.session.add(current_user)

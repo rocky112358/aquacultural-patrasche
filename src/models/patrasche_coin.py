@@ -9,6 +9,7 @@ class User(Base):
 
     id = Column(String, primary_key=True)
     balance = Column(Integer)
+    meow_count = Column(Integer)
 
     def __init__(self, id, balance):
         self.id = id
