@@ -19,5 +19,5 @@ def get_online_users(chat_id):
         return_list = list()
         for user in users:
             if isinstance(user.status, UserStatusOnline):
-                return_list.append((user.id, user.username))
+                return_list.append(user.id)
         return return_list
