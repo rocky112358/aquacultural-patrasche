@@ -35,9 +35,17 @@ class PatrascheCoin:
                 bark_count = 1
 
         resp_text = ""
-        for _ in range(bark_count):
-            bark = self._get_random_bark()
-            if update.message.chat.id == -1001254166381:  # aquaculture group
+        if update.message.chat.id == -1001254166381:  # aquaculture group
+            # get a list of online users
+            online_users = get_online_users(update.message.chat.id)
+            # and remove from_user's id
+            while update.message.from_user.id in online_users:
+                online_users.remove(update.message.from_user.id)
+            # and add patrasche
+            online_users.append("patrasche")
+
+            for _ in range(bark_count):
+                bark = self._get_random_bark()
                 # check if the user has enough balance to bark
                 current_user = self.session.query(User).filter(User.id == str(update.message.from_user.id)).one()
                 if (current_user.balance - BARK_COST) < 0:
@@ -45,17 +53,10 @@ class PatrascheCoin:
                     break
 
                 resp_text += f"{bark}\n"
+
                 # free bark
                 if bark == "파트라슈는 안전자산!":
                     continue
-
-                # get a list of online users
-                online_users = get_online_users(update.message.chat.id)
-                # and remove from_user's id
-                while update.message.from_user.id in online_users:
-                    online_users.remove(update.message.from_user.id)
-                # and add patrasche
-                online_users.append("patrasche")
 
                 # subtract bark cost from balance
                 current_user.balance -= BARK_COST
@@ -81,6 +82,10 @@ class PatrascheCoin:
 
                 self.session.add(current_user)
                 self.session.commit()
+
+        else:
+            bark = self._get_random_bark()
+            resp_text += f"{bark}\n"
 
         context.bot.send_message(chat_id=update.effective_chat.id,
                                  text=resp_text,
