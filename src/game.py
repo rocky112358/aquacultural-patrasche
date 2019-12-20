@@ -26,62 +26,65 @@ class PatrascheCoin:
         return res[ord(os.urandom(1))]
 
     def bark(self, update, context):
-        bark = self._get_random_bark()
-        resp_text = f"{bark}"
+        if len(context.args) == 0:
+            bark_count = 1
+        else:
+            try:
+                bark_count = int(context.args[0])
+            except ValueError:
+                bark_count = 1
 
-        if update.message.chat.id == -1001254166381:  # aquaculture group
-            # check if the user has enough balance to bark
-            current_user = self.session.query(User).filter(User.id == str(update.message.from_user.id)).one()
-            if (current_user.balance - BARK_COST) < 0:
-                context.bot.send_message(chat_id=update.effective_chat.id,
-                                         text=f"check your balance",
-                                         reply_to_message_id=update.message.message_id)
-                return
+        resp_text = ""
+        for _ in range(bark_count):
+            bark = self._get_random_bark()
+            if update.message.chat.id == -1001254166381:  # aquaculture group
+                # check if the user has enough balance to bark
+                current_user = self.session.query(User).filter(User.id == str(update.message.from_user.id)).one()
+                if (current_user.balance - BARK_COST) < 0:
+                    resp_text += "check your balance\n"
+                    break
 
-            # free bark
-            if bark == "파트라슈는 안전자산!":
-                context.bot.send_message(chat_id=update.effective_chat.id,
-                                         text=resp_text,
-                                         reply_to_message_id=update.message.message_id)
-                return
+                resp_text += f"{bark}\n"
+                # free bark
+                if bark == "파트라슈는 안전자산!":
+                    continue
 
-            # get a list of online users
-            online_users = get_online_users(update.message.chat.id)
-            # and remove from_user's id
-            while update.message.from_user.id in online_users:
-                online_users.remove(update.message.from_user.id)
-            # and add patrasche
-            online_users.append("patrasche")
+                # get a list of online users
+                online_users = get_online_users(update.message.chat.id)
+                # and remove from_user's id
+                while update.message.from_user.id in online_users:
+                    online_users.remove(update.message.from_user.id)
+                # and add patrasche
+                online_users.append("patrasche")
 
-            # subtract bark cost from balance
-            current_user.balance -= BARK_COST
-            # and give coin to miners
-            for user_id in online_users:
-                mining_user = self.session.query(User).filter(User.id == str(user_id)).one()
-                mining_user.balance += BARK_COST / len(online_users)
-                self.session.add(mining_user)
+                # subtract bark cost from balance
+                current_user.balance -= BARK_COST
+                # and give coin to miners
+                for user_id in online_users:
+                    mining_user = self.session.query(User).filter(User.id == str(user_id)).one()
+                    mining_user.balance += BARK_COST / len(online_users)
+                    self.session.add(mining_user)
 
-            # additional cost
-            if bark == "크르릉...":
-                patrasche = self.session.query(User).filter(User.id == "patrasche").one()
-                current_user.balance -= BARK_COST / 2
-                patrasche.balance += BARK_COST / 2
+                # additional cost
+                if bark == "크르릉...":
+                    patrasche = self.session.query(User).filter(User.id == "patrasche").one()
+                    current_user.balance -= BARK_COST / 2
+                    patrasche.balance += BARK_COST / 2
 
-            # check if 야옹
-            if bark == "야옹":
-                patrasche = self.session.query(User).filter(User.id == "patrasche").one()
-                patrasche.balance = patrasche.balance / 2
-                current_user.balance += patrasche.balance / 2
-                current_user.meow_count += 1
-                resp_text += f"\nReward: {patrasche.balance / 2}PTC"
+                # check if 야옹
+                if bark == "야옹":
+                    patrasche = self.session.query(User).filter(User.id == "patrasche").one()
+                    patrasche.balance = patrasche.balance / 2
+                    current_user.balance += patrasche.balance / 2
+                    current_user.meow_count += 1
+                    resp_text += f"Reward: {patrasche.balance / 2}PTC\n"
 
-            self.session.add(current_user)
-            self.session.commit()
+                self.session.add(current_user)
+                self.session.commit()
 
         context.bot.send_message(chat_id=update.effective_chat.id,
                                  text=resp_text,
                                  reply_to_message_id=update.message.message_id)
-        return
 
     def balance(self, update, context):
         # check if 1:1 conversation
