@@ -15,7 +15,8 @@ updater = Updater(token=TELEGRAM_API_TOKEN, use_context=True)
 dispatcher = updater.dispatcher
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
-logging.info("bot start")
+logger = logging.getLogger(__name__)
+logger.info("bot start")
 
 
 def start(update, context):
@@ -65,7 +66,7 @@ def vs(update, context):
 
 
 def err_handler(update, context):
-    return
+    logger.warning('Update "%s" caused error "%s"', update, context.error)
 
 
 # patrasche coin
