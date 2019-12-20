@@ -17,8 +17,10 @@ class PatrascheCoin:
 
     @staticmethod
     def _get_random_bark():
-        res = [["월월!", "멍멍!", "컹컹!", "파트라슈는 안전자산!"][ord(os.urandom(1)) % 4]] * 253 \
+        res = [["월월!", "멍멍!", "컹컹!", "파트라슈는 안전자산!"][ord(os.urandom(1)) % 4]] * 250 \
+              + ["옹야"] * 3 \
               + ["야옹"] * 3  # 1.171875% chance of 야옹
+
         return res[ord(os.urandom(1))]
 
     def bark(self, update, context):
