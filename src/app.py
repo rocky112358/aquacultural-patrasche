@@ -44,6 +44,13 @@ def roll(update, context):
                              reply_to_message_id=update.message.message_id)
 
 
+def _get_random_bark():
+    res = [["월월!", "멍멍!", "컹컹!"][ord(os.urandom(1)) % 3]] * 255 \
+          + ["야옹"] * 1
+
+    return res[ord(os.urandom(1))]
+
+
 def up(update, context):
     resp_text = f".\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n" \
                 f"\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n{_get_random_bark()}"
