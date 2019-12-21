@@ -37,7 +37,7 @@ class PatrascheCoin:
                 bark_count = 1
 
         resp_text = ""
-        if update.message.chat.id == -1001254166381:  # aquaculture group
+        if update.message.chat.id == -1001265183135:  # meow group
             # get a list of online users
             online_users = get_online_users(update.message.chat.id)
             # and remove from_user's id
