@@ -6,7 +6,7 @@ from sqlalchemy.orm import sessionmaker
 from models.patrasche_coin import User
 from telegram_client import get_online_users
 
-BARK_COST = 63
+BARK_COST = 2520  # LCM of 1~len(user_list)
 
 
 class PatrascheCoin:
