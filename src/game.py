@@ -53,6 +53,7 @@ class PatrascheCoin:
                     break
 
                 resp_text += f"{bark}\n"
+                current_user.bark_count += 1
 
                 # free bark
                 if bark == "파트라슈는 안전자산!":
