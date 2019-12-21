@@ -24,7 +24,7 @@ def get_online_users(chat_id):
 
 
 async def _set_user_rank(chat_id, user_id, rank_text):
-    res = await telegram_client.edit_admin(chat_id, user_id, title=rank_text)
+    res = await telegram_client.edit_admin(chat_id, user_id, is_admin=True, title=rank_text)
     return res
 
 
