@@ -7,6 +7,8 @@ from models.patrasche_coin import User
 from telegram_client import get_online_users
 
 BARK_COST = 2520  # LCM of 1~len(user_list)
+RANK = ["", "1.길냥이", "2.뚱냥이", "3.떼껄룩", "4.점박냥", "5.고등어냥", "6.치즈냥", "7.삼색냥", "8.샴고양이", "9.페르시안"] \
+       + ["X.개냥이"] * 191  # 0~200 ranks
 
 
 class PatrascheCoin:
@@ -84,6 +86,10 @@ class PatrascheCoin:
 
                 self.session.add(current_user)
                 self.session.commit()
+
+            # get rank
+            current_user = self.session.query(User).filter(User.id == str(update.message.from_user.id)).one()
+            resp_text += f"RANK: [{RANK[current_user.meow_count]}]\n"
 
         else:
             bark = self._get_random_bark()
