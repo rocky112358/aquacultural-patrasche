@@ -4,10 +4,10 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 from models.patrasche_coin import User
-from telegram_client import get_online_users
+from telegram_client import get_online_users, set_user_rank
 
 BARK_COST = 2520  # LCM of 1~len(user_list)
-RANK = ["", "1.길냥이", "2.뚱냥이", "3.떼껄룩", "4.점박냥", "5.고등어냥", "6.치즈냥", "7.삼색냥", "8.샴고양이", "9.페르시안"] \
+RANK = ["0. ", "1.길냥이", "2.뚱냥이", "3.떼껄룩", "4.점박냥", "5.고등어냥", "6.치즈냥", "7.삼색냥", "8.샴고양이", "9.페르시안"] \
        + ["X.개냥이"] * 191  # 0~200 ranks
 
 
@@ -91,14 +91,14 @@ class PatrascheCoin:
             # get rank
             current_user = self.session.query(User).filter(User.id == str(update.message.from_user.id)).one()
             resp_text += f"RANK: [{RANK[current_user.meow_count]}]\n"
+            set_user_rank(update.message.chat.id, update.message.from_user.id, RANK[current_user.meow_count])
+
+            context.bot.send_message(chat_id=update.effective_chat.id,
+                                     text=resp_text,
+                                     reply_to_message_id=update.message.message_id)
 
         else:
-            bark = self._get_random_bark()
-            resp_text += f"{bark}\n"
-
-        context.bot.send_message(chat_id=update.effective_chat.id,
-                                 text=resp_text,
-                                 reply_to_message_id=update.message.message_id)
+            pass
 
     def balance(self, update, context):
         # check if 1:1 conversation
