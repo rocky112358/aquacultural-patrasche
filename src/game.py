@@ -83,7 +83,7 @@ class PatrascheCoin:
                     patrasche.balance = initial_balance - prize
                     current_user.balance += prize
                     current_user.meow_count += 1
-                    resp_text += f"Reward: {prize}PTC\n"
+                    resp_text += f"<b>Reward: {prize}PTC</b>\n"
 
                 self.session.add(current_user)
                 self.session.commit()
@@ -95,7 +95,8 @@ class PatrascheCoin:
 
             context.bot.send_message(chat_id=update.effective_chat.id,
                                      text=resp_text,
-                                     reply_to_message_id=update.message.message_id)
+                                     reply_to_message_id=update.message.message_id,
+                                     parse_mode='html')
 
         else:
             pass
