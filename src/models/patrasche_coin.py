@@ -8,6 +8,7 @@ class User(Base):
     __tablename__ = 'aqua_user'
 
     id = Column(String, primary_key=True)
+    name = Column(String)
     balance = Column(Integer)
     meow_count = Column(Integer)
     bark_count = Column(Integer)
