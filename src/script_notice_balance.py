@@ -2,7 +2,7 @@ import os
 
 import telegram
 
-from src.game import PatrascheCoin
+from game import PatrascheCoin
 
 TELEGRAM_API_TOKEN = os.getenv('TELEGRAM_API_TOKEN')
 
