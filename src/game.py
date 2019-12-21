@@ -9,11 +9,15 @@ from src.telegram_client import get_online_users, set_user_rank
 BARK_COST = 2520  # LCM of 1~len(user_list)
 RANK = ["0. ", "1.길냥이", "2.뚱냥이", "3.떼껄룩", "4.점박냥", "5.고등어냥", "6.치즈냥", "7.삼색냥", "8.샴고양이", "9.페르시안"] \
        + ["X.개냥이"] * 191  # 0~200 ranks
+PATRASCHE_ROOTDIR = os.getenv('PATRASCHE_ROOTDIR')
 
 
 class PatrascheCoin:
     def __init__(self):
-        self.engine = create_engine("sqlite:///patrasche_coin.sqlite")
+        if PATRASCHE_ROOTDIR is None:
+            print("ERROR: Set PATRASCHE_ROOTDIR")
+            exit(1)
+        self.engine = create_engine(f"sqlite:///{PATRASCHE_ROOTDIR}patrasche_coin.sqlite")
         Session = sessionmaker(bind=self.engine)
         self.session = Session()
 
