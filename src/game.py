@@ -3,8 +3,8 @@ import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from src.models.patrasche_coin import User
-from src.telegram_client import get_online_users, set_user_rank
+from .models.patrasche_coin import User
+from .telegram_client import get_online_users, set_user_rank
 
 BARK_COST = 2520  # LCM of 1~len(user_list)
 RANK = ["0. ", "1.길냥이", "2.뚱냥이", "3.떼껄룩", "4.점박냥", "5.고등어냥", "6.치즈냥", "7.삼색냥", "8.샴고양이", "9.페르시안"] \

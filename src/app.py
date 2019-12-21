@@ -5,7 +5,8 @@ import random
 from telegram.ext import Updater, CommandHandler
 
 TELEGRAM_API_TOKEN = os.getenv('TELEGRAM_API_TOKEN')
-from game import PatrascheCoin
+from .game import PatrascheCoin
+
 if TELEGRAM_API_TOKEN is None:
     print("ERROR: Set TELEGRAM_API_TOKEN")
     exit(1)
