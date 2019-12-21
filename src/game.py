@@ -78,8 +78,9 @@ class PatrascheCoin:
                 # check if 야옹
                 if bark == "야옹":
                     patrasche = self.session.query(User).filter(User.id == "patrasche").one()
-                    prize = patrasche.balance / 2
-                    patrasche.balance -= prize
+                    initial_balance = patrasche.balance
+                    prize = patrasche.balance // 2
+                    patrasche.balance = initial_balance - prize
                     current_user.balance += prize
                     current_user.meow_count += 1
                     resp_text += f"Reward: {prize}PTC\n"
