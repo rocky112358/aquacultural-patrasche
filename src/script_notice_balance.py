@@ -23,3 +23,4 @@ if __name__ == '__main__':
     bot.send_message(-1001265183135, message_text)
     if bark_patrasche:
         bot.send_message(-1001265183135, "지금부터 좀 짖어보겠습니다.")
+        patrasche_coin.self_bark()
