@@ -13,7 +13,7 @@ if __name__ == '__main__':
     patrasche_coin = PatrascheCoin()
 
     patrasche = patrasche_coin.get_info("patrasche")
-    if patrasche_coin.balance >= 126000 * 5:
+    if patrasche.balance >= 126000 * 5:
         patrasche_coin.airdrop()
 
     users = patrasche_coin.get_all_info()

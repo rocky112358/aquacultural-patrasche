@@ -117,6 +117,7 @@ class PatrascheCoin:
             if ord(os.urandom(1)) >= 128:
                 result.append((user.id, user.name))
 
+        resp_text = f"<b>Airdrop (각 10 bark)</b>\n받은사람: "
         if len(result) > 0:
             total_price = 0
             for user in result:
@@ -129,12 +130,13 @@ class PatrascheCoin:
             self.session.add(patrasche)
             self.session.commit()
 
-            resp_text = f"<b>Airdrop (각 10 bark)</b>\n받은사람: {', '.join([user[1] for user in result])}"
-            bot = telegram.Bot(TELEGRAM_API_TOKEN)
-            bot.send_message(MEOW_GROUP_ID, resp_text, parse_mode="html")
+            resp_text += f"{', '.join([user[1] for user in result])}"
 
         else:
             pass
+
+        bot = telegram.Bot(TELEGRAM_API_TOKEN)
+        bot.send_message(MEOW_GROUP_ID, resp_text, parse_mode="html")
 
     def balance(self, update, context):
         # check if 1:1 conversation
