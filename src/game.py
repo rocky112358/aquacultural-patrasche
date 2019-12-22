@@ -124,12 +124,12 @@ class PatrascheCoin:
                 price = BARK_COST // len(result)
                 total_price += price
                 u.balance += price
-                self.seesion.add(u)
+                self.session.add(u)
             patrasche.balance -= total_price
             self.session.add(patrasche)
             self.session.commit()
 
-            resp_text = f"<b>Airdrop</b>\n받은사람: {[user[1] for user in result].join(', ')}"
+            resp_text = f"<b>Airdrop</b>\n받은사람: {', '.join([user[1] for user in result])}"
             bot = telegram.Bot(TELEGRAM_API_TOKEN)
             bot.send_message(MEOW_GROUP_ID, resp_text)
 
