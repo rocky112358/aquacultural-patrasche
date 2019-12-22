@@ -108,58 +108,33 @@ class PatrascheCoin:
         else:
             pass
 
-    def self_bark(self):
-        bark = self._get_random_bark()
+    def airdrop(self):
+        patrasche = self.session.query(User).filter(User.id == "patrasche").one()
+        users = self.session.query(User).filter(User.id != "patrasche").all()
 
-        # get a list of online users
-        online_users = get_online_users(MEOW_GROUP_ID)
-        patrasche = self.session.query(User).filter(User.id == str("patrasche")).one()
+        result = []
+        for user in users:
+            if ord(os.urandom(1)) >= 128:
+                result.append((user.id, user.name))
 
-        resp_text = f"{bark}\n"
-        patrasche.bark_count += 1
+        if len(result) > 0:
+            total_price = 0
+            for user in result:
+                u = self.session.query(User).filter(User.id == user[0]).one()
+                price = BARK_COST // len(result)
+                total_price += price
+                u.balance += price
+                self.seesion.add(u)
+            patrasche.balance -= total_price
+            self.session.add(patrasche)
+            self.session.commit()
 
-        if bark == "파트라슈는 안전자산!":
+            resp_text = f"<b>Airdrop</b>\n받은사람: {[user[1] for user in result].join(', ')}"
+            bot = telegram.Bot(TELEGRAM_API_TOKEN)
+            bot.send_message(MEOW_GROUP_ID, resp_text)
+
+        else:
             pass
-
-        elif bark == "크르릉...":  # patrasche takes 1.5 bark from miners
-            for user_id in online_users:
-                mining_user = self.session.query(User).filter(User.id == str(user_id)).one()
-                if mining_user.balance < 1.5 * BARK_COST:
-                    patrasche.balance += mining_user.balance
-                    mining_user.balance = 0
-                else:
-                    mining_user.balance -= 1.5 * BARK_COST
-                    patrasche.balance += 1.5 * BARK_COST
-                self.session.add(mining_user)
-
-        elif bark == "야옹":  # patrasche takes half of each miners balance
-            total_prize = 0
-            for user_id in online_users:
-                mining_user = self.session.query(User).filter(User.id == str(user_id)).one()
-                prize = mining_user.balance // 2
-                total_prize += prize
-
-                mining_user.balance -= prize
-                patrasche.balance += prize
-                self.session.add(mining_user)
-            patrasche.meow_count += 1
-            resp_text += f"<b>Reward: {total_prize}PTC</b>\n"
-
-        else:  # give bark cost to miners
-            patrasche.balance -= BARK_COST
-            for user_id in online_users:
-                mining_user = self.session.query(User).filter(User.id == str(user_id)).one()
-                mining_user.balance += BARK_COST / len(online_users)
-                self.session.add(mining_user)
-
-        self.session.add(patrasche)
-        self.session.commit()
-
-        # get rank
-        resp_text += f"RANK: [{RANK[patrasche.meow_count]}]\n"
-
-        bot = telegram.Bot(TELEGRAM_API_TOKEN)
-        bot.send_message(chat_id=MEOW_GROUP_ID, text=resp_text, parse_mode='html')
 
     def balance(self, update, context):
         # check if 1:1 conversation
