@@ -8,8 +8,10 @@ from models.patrasche_coin import User
 from telegram_client import get_online_users, set_user_rank
 
 BARK_COST = 2520  # LCM of 1~len(user_list)
-RANK = ["0. ", "1.길냥이", "2.뚱냥이", "3.떼껄룩", "4.점박냥", "5.고등어냥", "6.치즈냥", "7.삼색냥", "8.샴고양이", "9.페르시안"] \
-       + ["X.개냥이"] * 191  # 0~200 ranks
+RANK = ["0.", "1.길냥이", "2.뚱냥이", "3.떼껄룩", "4.점박냥", "5.고등어냥", "6.치즈냥", "7.삼색냥", "8.샴고양이", "9.페르시안"] \
+       + ["10.승냥이", "11.킹냥이", "12.갓냥이", "13.황냥이", "14.제너럴냥이", "15.호랑이", "16.눈표범", "17.롱캣"] \
+       + ["18.냥캣", "19.헬로키티", "20.도라에몽"] \
+       + ["X.개냥이"] * 181  # 0~200 ranks
 PATRASCHE_ROOTDIR = os.getenv('PATRASCHE_ROOTDIR')
 TELEGRAM_API_TOKEN = os.getenv('TELEGRAM_API_TOKEN')
 
