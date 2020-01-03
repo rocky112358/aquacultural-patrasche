@@ -79,11 +79,11 @@ def patrasche_coin_help(update, context):
 채굴: bark 시 online 상태인 다른유저와 파트라슈가 2520PTC를 1/n로 나눠가짐
 
 <확률표>
-월월!, 멍멍!, 컹컹! (69.53125%)
+월월!, 멍멍!, 컹컹! (70.3125%)
 파트라슈는 안전자산! (25%): 2520PTC 반환, 채굴 없음
 크르릉... (3.125%): 파트라슈가 1260PTC(1/2 bark) 추가 징수
-옹야 (1.171875%)
-야옹 (1.171875%): 야옹 카운트 +1, 파트라슈 잔고의 절반 획득
+옹야 (0.78125%)
+야옹 (0.78125%): 야옹 카운트 +1, 파트라슈 잔고의 절반 획득
 """
     context.bot.send_message(chat_id=update.effective_chat.id, text=help_text,
                              reply_to_message_id=update.message.message_id)
