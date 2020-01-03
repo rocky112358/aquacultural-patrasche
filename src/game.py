@@ -17,6 +17,7 @@ TELEGRAM_API_TOKEN = os.getenv('TELEGRAM_API_TOKEN')
 
 MEOW_GROUP_ID = -1001265183135
 
+
 class PatrascheCoin:
     def __init__(self):
         if PATRASCHE_ROOTDIR is None:
@@ -52,13 +53,14 @@ class PatrascheCoin:
             # and remove from_user's id
             while update.message.from_user.id in online_users:
                 online_users.remove(update.message.from_user.id)
-            # and add patrasche
-            online_users.append("patrasche")
+
+            current_user = self.session.query(User).filter(User.id == str(update.message.from_user.id)).one()
+            patrasche = self.session.query(User).filter(User.id == "patrasche").one()
+            miners = self.session.query(User).filter(User.id.in_(online_users)).all()
 
             for _ in range(bark_count):
                 bark = self._get_random_bark()
                 # check if the user has enough balance to bark
-                current_user = self.session.query(User).filter(User.id == str(update.message.from_user.id)).one()
                 if (current_user.balance - BARK_COST) < 0:
                     resp_text += "check your balance\n"
                     break
@@ -72,21 +74,18 @@ class PatrascheCoin:
 
                 # subtract bark cost from balance
                 current_user.balance -= BARK_COST
-                # and give coin to miners
-                for user_id in online_users:
-                    mining_user = self.session.query(User).filter(User.id == str(user_id)).one()
-                    mining_user.balance += BARK_COST / len(online_users)
-                    self.session.add(mining_user)
+                # and give coin to miners and patrasche
+                for miner in miners:
+                    miner.balance += BARK_COST / (len(miners)+1)
+                patrasche.balance += BARK_COST / (len(miners)+1)
 
                 # additional cost
                 if bark == "크르릉...":
-                    patrasche = self.session.query(User).filter(User.id == "patrasche").one()
                     current_user.balance -= BARK_COST / 2
                     patrasche.balance += BARK_COST / 2
 
                 # check if 야옹
                 if bark == "야옹":
-                    patrasche = self.session.query(User).filter(User.id == "patrasche").one()
                     initial_balance = patrasche.balance
                     prize = patrasche.balance // 2
                     patrasche.balance = initial_balance - prize
@@ -94,11 +93,13 @@ class PatrascheCoin:
                     current_user.meow_count += 1
                     resp_text += f"<b>Reward: {prize}PTC</b>\n"
 
-                self.session.add(current_user)
-                self.session.commit()
+            self.session.add(current_user)
+            self.session.add(patrasche)
+            for miner in miners:
+                self.session.add(miner)
+            self.session.commit()
 
             # get rank
-            current_user = self.session.query(User).filter(User.id == str(update.message.from_user.id)).one()
             resp_text += f"RANK: [{RANK[current_user.meow_count]}]\n"
             set_user_rank(update.message.chat.id, update.message.from_user.id, RANK[current_user.meow_count])
 
