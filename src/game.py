@@ -101,12 +101,12 @@ class PatrascheCoin:
 
             # get rank
             if current_user.meow_count == 0:
-                rank_text = ""
+                rank_text = "None"
             elif current_user.meow_count > 100:
-                rank_text = f"RANK: X.The 개냥이"
+                rank_text = f"X.The 개냥이"
             else:
-                rank_text = f"RANK: [{current_user.meow_count}.{RANK[(current_user.meow_count-1) // 5]} {TIER[(current_user.meow_count-1) % 5]}]"
-            resp_text += rank_text
+                rank_text = f"{current_user.meow_count}.{RANK[(current_user.meow_count-1) // 5]} {TIER[(current_user.meow_count-1) % 5]}"
+            resp_text += f"RANK: [{rank_text}]
             set_user_rank(update.message.chat.id, update.message.from_user.id, rank_text)
 
             for i in range(0, len(resp_text), 1000):
