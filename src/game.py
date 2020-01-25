@@ -103,10 +103,11 @@ class PatrascheCoin:
             resp_text += f"RANK: [{RANK[current_user.meow_count]}]\n"
             set_user_rank(update.message.chat.id, update.message.from_user.id, RANK[current_user.meow_count])
 
-            context.bot.send_message(chat_id=update.effective_chat.id,
-                                     text=resp_text,
-                                     reply_to_message_id=update.message.message_id,
-                                     parse_mode='html')
+            for i in range(0, len(resp_text), 1000):
+                context.bot.send_message(chat_id=update.effective_chat.id,
+                                         text=resp_text[i:i+1000],
+                                         reply_to_message_id=update.message.message_id,
+                                         parse_mode='html')
 
         else:
             pass
