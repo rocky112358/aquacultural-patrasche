@@ -8,10 +8,10 @@ from models.patrasche_coin import User
 from telegram_client import get_online_users, set_user_rank
 
 BARK_COST = 2520  # LCM of 1~len(user_list)
-RANK = ["0.", "1.길냥이", "2.뚱냥이", "3.떼껄룩", "4.점박냥", "5.고등어냥", "6.치즈냥", "7.삼색냥", "8.샴고양이", "9.페르시안"] \
-       + ["10.승냥이", "11.킹냥이", "12.갓냥이", "13.황냥이", "14.제너럴냥이", "15.호랑이", "16.눈표범", "17.롱캣"] \
-       + ["18.냥캣", "19.헬로키티", "20.도라에몽"] \
-       + ["X.개냥이"] * 181  # 0~200 ranks
+RANK = ["길냥이", "뚱냥이", "떼껄룩", "점박냥", "고등어냥", "치즈냥", "삼색냥", "샴고양이", "페르시안"] \
+       + ["승냥이", "킹냥이", "갓냥이", "황냥이", "제너럴냥이", "호랑이", "눈표범", "롱캣"] \
+       + ["냥캣", "헬로키티", "도라에몽"]  # total 20
+TIER = ["V", "IV", "III", "II", "I"]
 PATRASCHE_ROOTDIR = os.getenv('PATRASCHE_ROOTDIR')
 TELEGRAM_API_TOKEN = os.getenv('TELEGRAM_API_TOKEN')
 
@@ -100,8 +100,13 @@ class PatrascheCoin:
             self.session.commit()
 
             # get rank
-            resp_text += f"RANK: [{RANK[current_user.meow_count]}]\n"
-            set_user_rank(update.message.chat.id, update.message.from_user.id, RANK[current_user.meow_count])
+
+            if current_user.meow_count > 100:
+                rank_text = f"RANK: X.The 개냥이"
+            else:
+                rank_text = f"RANK: [{current_user.meow_count}.{RANK[current_user.meow_count // 5]} {TIER[current_user.meow_count % 5}]}"
+            resp_text += rank_text
+            set_user_rank(update.message.chat.id, update.message.from_user.id, rank_text)
 
             for i in range(0, len(resp_text), 1000):
                 context.bot.send_message(chat_id=update.effective_chat.id,
