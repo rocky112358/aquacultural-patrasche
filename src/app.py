@@ -146,7 +146,7 @@ dispatcher.add_handler(del_handler)
 
 # help command
 def help_(update, context):
-    a = [each.command for each in dispatcher.handlers[0]]
+    a = [", ".join(each.command) for each in dispatcher.handlers[0]]
     resp_text = ", ".join(a)
     context.bot.send_message(chat_id=update.effective_chat.id, text=resp_text,
                              reply_to_message_id=update.message.message_id)
