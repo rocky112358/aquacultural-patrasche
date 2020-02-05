@@ -36,3 +36,16 @@ def set_user_rank(chat_id, user_id, rank_text):
     with telegram_client:
         res = telegram_client.loop.run_until_complete(_set_user_rank(chat_id, user_id, rank_text))
         return res
+
+
+async def _delete_message(chat_id, message_id):
+    res = await telegram_client.delete_messages(chat_id, message_id)
+
+    return res
+
+
+def delete_message(chat_id, message_id):
+    with telegram_client:
+        res = telegram_client.loop.run_until_complete(_delete_message(chat_id, message_id))
+        return res
+

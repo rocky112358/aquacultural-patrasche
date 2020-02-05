@@ -1,8 +1,11 @@
+from collections import defaultdict
+from datetime import datetime, timedelta
 import logging
 import os
 import random
 
 from telegram.ext import Updater, CommandHandler
+from telegram_client import delete_message
 
 TELEGRAM_API_TOKEN = os.getenv('TELEGRAM_API_TOKEN')
 from game import PatrascheCoin
@@ -73,6 +76,27 @@ def vs(update, context):
                              reply_to_message_id=update.message.message_id)
 
 
+del_candidate = defaultdict(lambda: {"voters": set(), "expire": datetime.now()})
+
+
+def del_(update, context):
+    reply_message = update.message.reply_to_message
+    if reply_message is not None and update.effective_chat.id == -1001254166381:
+        reply_message_id = reply_message.message_id
+        del_candidate[reply_message_id]["voters"].add(update.message.from_user.id)
+        del_candidate[reply_message_id]["expire"] = datetime.now()+timedelta(minutes=30)
+        if len(del_candidate[reply_message_id]["voters"]) >= 3:
+            delete_message(-1001254166381, reply_message_id)
+            context.bot.send_message(chat_id=update.effective_chat.id, text="삭제했다 애송이")
+            del del_candidate[reply_message_id]
+    del_keys = []
+    for each in del_candidate.keys():
+        if del_candidate[each]["expire"] < datetime.now():
+            del_keys.append(each)
+    for each in del_keys:
+        del del_candidate[each]
+
+
 def patrasche_coin_help(update, context):
     help_text = """
 1 bark = 2520PTC 소비
@@ -105,6 +129,7 @@ b_handler = CommandHandler('b', patrasche_coin.bark)
 up_handler = CommandHandler('up', up)
 vs_handler = CommandHandler('vs', vs)
 ptchelp_handler = CommandHandler('ptchelp', patrasche_coin_help)
+del_handler = CommandHandler('del', del_)
 
 # add handlers to dispatcher
 dispatcher.add_handler(start_handler)
@@ -115,6 +140,7 @@ dispatcher.add_handler(b_handler)
 dispatcher.add_handler(up_handler)
 dispatcher.add_handler(vs_handler)
 dispatcher.add_handler(ptchelp_handler)
+dispatcher.add_handler(del_handler)
 
 
 # help command
