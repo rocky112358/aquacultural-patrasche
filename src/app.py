@@ -77,6 +77,7 @@ def vs(update, context):
 
 
 del_candidate = defaultdict(lambda: {"voters": set(), "expire": datetime.now()})
+del_notice_list = ["삭제했다 애송이", "삼진에바로 기각되었습니다", "파트라슈가 해치웠으니 안심하라구!"]
 
 
 def del_(update, context):
@@ -87,7 +88,7 @@ def del_(update, context):
         del_candidate[reply_message_id]["expire"] = datetime.now()+timedelta(minutes=30)
         if len(del_candidate[reply_message_id]["voters"]) >= 3:
             delete_message(-1001254166381, reply_message_id)
-            context.bot.send_message(chat_id=update.effective_chat.id, text="삭제했다 애송이")
+            context.bot.send_message(chat_id=update.effective_chat.id, text=random.choice(del_notice_list))
             del del_candidate[reply_message_id]
     del_keys = []
     for each in del_candidate.keys():
