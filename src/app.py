@@ -129,7 +129,7 @@ b_handler = CommandHandler('b', patrasche_coin.bark)
 up_handler = CommandHandler('up', up)
 vs_handler = CommandHandler('vs', vs)
 ptchelp_handler = CommandHandler('ptchelp', patrasche_coin_help)
-del_handler = CommandHandler('del', del_)
+del_handler = CommandHandler(['del', 'eva', 'evande'], del_)
 
 # add handlers to dispatcher
 dispatcher.add_handler(start_handler)
@@ -145,7 +145,7 @@ dispatcher.add_handler(del_handler)
 
 # help command
 def help_(update, context):
-    a = [each.command[0] for each in dispatcher.handlers[0]]
+    a = [each.command for each in dispatcher.handlers[0]]
     resp_text = ", ".join(a)
     context.bot.send_message(chat_id=update.effective_chat.id, text=resp_text,
                              reply_to_message_id=update.message.message_id)
