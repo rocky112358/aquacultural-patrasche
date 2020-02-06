@@ -96,6 +96,7 @@ def del_(update, context):
             del_keys.append(each)
     for each in del_keys:
         del del_candidate[each]
+    print(del_candidate)
 
 
 def patrasche_coin_help(update, context):
