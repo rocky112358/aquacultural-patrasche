@@ -4,7 +4,8 @@ import logging
 import os
 import random
 
-from telegram.ext import Updater, CommandHandler
+from telegram.ext import Updater, CommandHandler, MessageHandler
+from telegram.ext.filters import Filters
 from telegram_client import delete_message
 
 TELEGRAM_API_TOKEN = os.getenv('TELEGRAM_API_TOKEN')
@@ -85,7 +86,7 @@ def del_(update, context):
     if reply_message is not None and update.effective_chat.id == -1001254166381:
         reply_message_id = reply_message.message_id
         del_candidate[reply_message_id]["voters"].add(update.message.from_user.id)
-        del_candidate[reply_message_id]["expire"] = datetime.now()+timedelta(minutes=30)
+        del_candidate[reply_message_id]["expire"] = datetime.now() + timedelta(minutes=30)
         if len(del_candidate[reply_message_id]["voters"]) >= 3:
             delete_message(-1001254166381, reply_message_id)
             context.bot.send_message(chat_id=update.effective_chat.id, text=random.choice(del_notice_list))
@@ -98,6 +99,21 @@ def del_(update, context):
         del del_candidate[each]
 
 
+mute_user_dict = defaultdict(lambda: {"voters": set(), "expire": datetime.now() + timedelta(minutes=3)})
+
+
+def mute_loop(update, context):
+    if update.message.from_user.id in mute_user_dict.keys():
+        if mute_user_dict[update.message.from_user.id]['expire'] <= datetime.now():
+            del mute_user_dict[update.message.from_user.id]
+        elif len(mute_user_dict[update.message.from_user.id]["voters"]) >= 3:
+            delete_message(-1001254166381, update.message.message_id)
+
+
+def mute(update, context):
+    reply_message = update.message.reply_to_message
+    if reply_message is not None and update.effective_chat.id == -1001254166381:
+        mute_user_dict[reply_message.from_user.id]["voters"].add(update.message.from_user.id)
 def patrasche_coin_help(update, context):
     help_text = """
 1 bark = 2520PTC 소비
@@ -131,6 +147,8 @@ up_handler = CommandHandler('up', up)
 vs_handler = CommandHandler('vs', vs)
 ptchelp_handler = CommandHandler('ptchelp', patrasche_coin_help)
 del_handler = CommandHandler(['del', 'eva', 'evande'], del_)
+mute_handler = CommandHandler('mute', mute)
+mute_loop = MessageHandler(Filters.all, mute_loop)
 
 # add handlers to dispatcher
 dispatcher.add_handler(start_handler)
@@ -153,7 +171,9 @@ def help_(update, context):
 
 
 help_handler = CommandHandler('help', help_)
+dispatcher.add_handler(mute_handler)
 dispatcher.add_handler(help_handler)
+dispatcher.add_handler(mute_loop)
 
 # add an error handler to dispatcher
 dispatcher.add_error_handler(err_handler)
