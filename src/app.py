@@ -114,6 +114,21 @@ def mute(update, context):
     reply_message = update.message.reply_to_message
     if reply_message is not None and update.effective_chat.id == -1001254166381:
         mute_user_dict[reply_message.from_user.id]["voters"].add(update.message.from_user.id)
+
+
+# help command
+def help_(update, context):
+    resp_text = "/roll [faces], /r [faces]: [faces]개의 면을 가진 주사위를 굴립니다. 기본값 6\n" \
+                "/roll 2, /r 2: 파트라슈가 응/아니로 대답해줍니다.\n" \
+                "/up: 파트라슈가 대화를 밀어올려줍니다\n" \
+                "/vs [list]: /로 구분된 [list]안의 선택지 중에서 하나를 골라줍니다.\n" \
+                "/del, /eva, /evande: 답글로 이렇게 달면 해당 메세지를 삭제합니다. 서로 다른 3명 필요\n" \
+                "/mute: 답글로 이렇게 달면 3분간 해당 사용자의 메세지는 자동으로 지워집니다. 서로 다른 3명 필요\n"
+    # a = [", ".join(each.command) for each in dispatcher.handlers[0]]
+    # resp_text = ", ".join(a)
+    context.bot.send_message(chat_id=update.effective_chat.id, text=resp_text)
+
+
 def patrasche_coin_help(update, context):
     help_text = """
 1 bark = 2520PTC 소비
@@ -138,12 +153,10 @@ def err_handler(update, context):
 patrasche_coin = PatrascheCoin()
 
 # handlers
-start_handler = CommandHandler('start', start)
-roll_handler = CommandHandler('roll', roll)
-r_handler = CommandHandler('r', roll)
-bark_handler = CommandHandler('bark', patrasche_coin.bark)
-b_handler = CommandHandler('b', patrasche_coin.bark)
+roll_handler = CommandHandler(['roll', 'r'], roll)
+bark_handler = CommandHandler(['bark', 'b'], patrasche_coin.bark)
 up_handler = CommandHandler('up', up)
+help_handler = CommandHandler('help', help_)
 vs_handler = CommandHandler('vs', vs)
 ptchelp_handler = CommandHandler('ptchelp', patrasche_coin_help)
 del_handler = CommandHandler(['del', 'eva', 'evande'], del_)
@@ -151,26 +164,12 @@ mute_handler = CommandHandler('mute', mute)
 mute_loop = MessageHandler(Filters.all, mute_loop)
 
 # add handlers to dispatcher
-dispatcher.add_handler(start_handler)
 dispatcher.add_handler(roll_handler)
-dispatcher.add_handler(r_handler)
 dispatcher.add_handler(bark_handler)
-dispatcher.add_handler(b_handler)
 dispatcher.add_handler(up_handler)
 dispatcher.add_handler(vs_handler)
 dispatcher.add_handler(ptchelp_handler)
 dispatcher.add_handler(del_handler)
-
-
-# help command
-def help_(update, context):
-    a = [", ".join(each.command) for each in dispatcher.handlers[0]]
-    resp_text = ", ".join(a)
-    context.bot.send_message(chat_id=update.effective_chat.id, text=resp_text,
-                             reply_to_message_id=update.message.message_id)
-
-
-help_handler = CommandHandler('help', help_)
 dispatcher.add_handler(mute_handler)
 dispatcher.add_handler(help_handler)
 dispatcher.add_handler(mute_loop)
