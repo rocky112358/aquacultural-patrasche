@@ -41,10 +41,14 @@ def roll(update, context):
     # roll
     if dice_face_cnt < 2:  # boom!
         resp_text = "월월!"
-    elif dice_face_cnt == 2:  # coin flip
-        resp_text = random.sample(['응', '아니'], 1)[0]
     else:
         resp_text = random.randint(1, dice_face_cnt)
+    context.bot.send_message(chat_id=update.effective_chat.id, text=resp_text,
+                             reply_to_message_id=update.message.message_id)
+
+
+def tf(update, context):
+    resp_text = random.sample(['응', '아니'], 1)[0]
     context.bot.send_message(chat_id=update.effective_chat.id, text=resp_text,
                              reply_to_message_id=update.message.message_id)
 
@@ -125,7 +129,7 @@ def mute(update, context):
 # help command
 def help_(update, context):
     resp_text = "/roll [faces], /r [faces]: [faces]개의 면을 가진 주사위를 굴립니다. 기본값 6\n" \
-                "/roll 2, /r 2: 파트라슈가 응/아니로 대답해줍니다.\n" \
+                "/bool, /coin, /tf: 파트라슈가 응/아니로 대답해줍니다.\n" \
                 "/up: 파트라슈가 대화를 밀어올려줍니다\n" \
                 "/vs [list]: /로 구분된 [list]안의 선택지 중에서 하나를 골라줍니다.\n" \
                 "/del, /eva, /evande: 답글로 이렇게 달면 해당 메세지를 삭제합니다. 서로 다른 3명 필요\n" \
@@ -160,6 +164,7 @@ def err_handler(update, context):
 
 # handlers
 roll_handler = CommandHandler(['roll', 'r'], roll)
+tf_handler = CommandHandler(['bool', 'coin', 'tf'], tf)
 bark_handler = CommandHandler(['bark', 'b'], bark)
 up_handler = CommandHandler('up', up)
 help_handler = CommandHandler('help', help_)
