@@ -175,6 +175,7 @@ mute_loop = MessageHandler(Filters.all, mute_loop)
 
 # add handlers to dispatcher
 dispatcher.add_handler(roll_handler)
+dispatcher.add_handler(tf_handler)
 dispatcher.add_handler(bark_handler)
 dispatcher.add_handler(up_handler)
 dispatcher.add_handler(vs_handler)
