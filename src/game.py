@@ -7,7 +7,7 @@ import telegram
 from models.patrasche_coin import User
 from telegram_client import get_online_users, set_user_rank
 
-BARK_COST = 2520  # LCM of 1~len(user_list)
+# BARK_COST = 2520  # LCM of 1~len(user_list)
 RANK = ["길냥이", "뚱냥이", "떼껄룩", "점박냥", "고등어냥", "치즈냥", "삼색냥", "샴고양이", "페르시안"] \
        + ["승냥이", "킹냥이", "갓냥이", "황냥이", "제너럴냥이", "호랑이", "눈표범", "롱캣"] \
        + ["냥캣", "헬로키티", "도라에몽"]  # total 20
@@ -18,7 +18,7 @@ TELEGRAM_API_TOKEN = os.getenv('TELEGRAM_API_TOKEN')
 MEOW_GROUP_ID = -1001265183135
 
 
-class PatrascheCoin:
+class PatrascheCoin:  # closed
     def __init__(self):
         if PATRASCHE_ROOTDIR is None:
             print("ERROR: Set PATRASCHE_ROOTDIR")

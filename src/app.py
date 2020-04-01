@@ -56,6 +56,12 @@ def _get_random_bark():
     return res[ord(os.urandom(1))]
 
 
+def bark(update, context):
+    resp_text = _get_random_bark()
+    context.bot.send_message(chat_id=update.effective_chat.id, text=resp_text,
+                             reply_to_message_id=update.message.message_id)
+
+
 def up(update, context):
     resp_text = f".\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n" \
                 f"\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n{_get_random_bark()}"
@@ -149,16 +155,15 @@ def err_handler(update, context):
     logger.warning('Update "%s" caused error "%s"', update, context.error)
 
 
-# patrasche coin
-patrasche_coin = PatrascheCoin()
+# patrasche coin (closed)
+# patrasche_coin = PatrascheCoin()
 
 # handlers
 roll_handler = CommandHandler(['roll', 'r'], roll)
-bark_handler = CommandHandler(['bark', 'b'], patrasche_coin.bark)
+bark_handler = CommandHandler(['bark', 'b'], bark)
 up_handler = CommandHandler('up', up)
 help_handler = CommandHandler('help', help_)
 vs_handler = CommandHandler('vs', vs)
-ptchelp_handler = CommandHandler('ptchelp', patrasche_coin_help)
 del_handler = CommandHandler(['del', 'eva', 'evande'], del_)
 mute_handler = CommandHandler('mute', mute)
 mute_loop = MessageHandler(Filters.all, mute_loop)
@@ -168,7 +173,6 @@ dispatcher.add_handler(roll_handler)
 dispatcher.add_handler(bark_handler)
 dispatcher.add_handler(up_handler)
 dispatcher.add_handler(vs_handler)
-dispatcher.add_handler(ptchelp_handler)
 dispatcher.add_handler(del_handler)
 dispatcher.add_handler(mute_handler)
 dispatcher.add_handler(help_handler)
