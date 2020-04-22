@@ -124,6 +124,20 @@ def mute(update, context):
     reply_message = update.message.reply_to_message
     if reply_message is not None and update.effective_chat.id == -1001254166381:
         mute_user_dict[reply_message.from_user.id]["voters"].add(update.message.from_user.id)
+        if len(mute_user_dict[update.message.from_user.id]["voters"]) >= 3:
+            context.bot.send_message(chat_id=update.effective_chat.id, text="말라뮤트!")
+
+
+def sticker_monitor(update, context):
+    sticker_blacklist = [
+        ('coinone_wow', '1⃣'),  # margin
+        ('BrokenCats', '😡'),  # cat1
+        ('BrokenCats', '😡'),  # cat2
+        ('SiljeonKejang', '👨\u200d🌾')  # nsfw
+    ]
+    if (update.message.sticker.set_name, update.message.sticker.emoji) in sticker_blacklist:
+        if update.effective_chat.id == -1001254166381:
+            delete_message(-1001254166381, update.message.message_id)
 
 
 # help command
@@ -171,6 +185,7 @@ help_handler = CommandHandler('help', help_)
 vs_handler = CommandHandler('vs', vs)
 del_handler = CommandHandler(['del', 'eva', 'evande'], del_)
 mute_handler = CommandHandler('mute', mute)
+sticker_blacklist_loop = MessageHandler(Filters.sticker, sticker_monitor)
 mute_loop = MessageHandler(Filters.all, mute_loop)
 
 # add handlers to dispatcher
@@ -182,6 +197,7 @@ dispatcher.add_handler(vs_handler)
 dispatcher.add_handler(del_handler)
 dispatcher.add_handler(mute_handler)
 dispatcher.add_handler(help_handler)
+dispatcher.add_handler(sticker_blacklist_loop)
 dispatcher.add_handler(mute_loop)
 
 # add an error handler to dispatcher
