@@ -9,7 +9,6 @@ from telegram.ext.filters import Filters
 from telegram_client import delete_message
 
 TELEGRAM_API_TOKEN = os.getenv('TELEGRAM_API_TOKEN')
-from game import PatrascheCoin
 
 if TELEGRAM_API_TOKEN is None:
     print("ERROR: Set TELEGRAM_API_TOKEN")
@@ -148,8 +147,6 @@ def help_(update, context):
                 "/vs [list]: /로 구분된 [list]안의 선택지 중에서 하나를 골라줍니다.\n" \
                 "/del, /eva, /evande: 답글로 이렇게 달면 해당 메세지를 삭제합니다. 서로 다른 3명 필요\n" \
                 "/mute: 답글로 이렇게 달면 3분간 해당 사용자의 메세지는 자동으로 지워집니다. 서로 다른 3명 필요\n"
-    # a = [", ".join(each.command) for each in dispatcher.handlers[0]]
-    # resp_text = ", ".join(a)
     context.bot.send_message(chat_id=update.effective_chat.id, text=resp_text)
 
 
