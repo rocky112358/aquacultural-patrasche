@@ -130,6 +130,7 @@ def mute(update, context):
 def sticker_monitor(update, context):
     sticker_blacklist = [
         ('coinone_wow', '1⃣'),  # margin
+        ('coinone_wow', '👍'), # upbit
         ('BrokenCats', '😡'),  # cat1
         ('BrokenCats', '😡'),  # cat2
         ('SiljeonKejang', '👨\u200d🌾')  # nsfw
