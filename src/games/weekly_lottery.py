@@ -45,7 +45,7 @@ class WeeklyLottery:
                                          reply_to_message_id=update.message.message_id,
                                          parse_mode='html')
                 return
-            new_ticket = BuyLog(update.message.from_user.id)
+            new_ticket = BuyLog(update.message.from_user.id, number)
 
             self.session.add(current_user)
             self.session.add(new_ticket)
