@@ -18,7 +18,7 @@ TELEGRAM_API_TOKEN = os.getenv('TELEGRAM_API_TOKEN')
 MEOW_GROUP_ID = -1001265183135
 
 
-class PatrascheCoin:  # closed
+class Nyantrasche:  # closed
     def __init__(self):
         if PATRASCHE_ROOTDIR is None:
             print("ERROR: Set PATRASCHE_ROOTDIR")
