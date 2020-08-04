@@ -114,7 +114,7 @@ mute_user_dict = defaultdict(lambda: {"voters": set(), "expire": datetime.now() 
 
 
 def mute_loop(update, context):
-    if update.message.from_user.id in mute_user_dict.keys():
+    if update.effective_chat.id == -1001254166381 and update.message.from_user.id in mute_user_dict.keys():
         if mute_user_dict[update.message.from_user.id]['expire'] <= datetime.now():
             del mute_user_dict[update.message.from_user.id]
         elif len(mute_user_dict[update.message.from_user.id]["voters"]) >= 3:
