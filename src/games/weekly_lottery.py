@@ -25,8 +25,7 @@ class WeeklyLottery:
     def _pay_lottery(self):
         pass
 
-    @staticmethod
-    def buy_lottey(self, update, context):
+    def buy_lottery(self, update, context):
         if update.message.chat.id == MEOW_GROUP_ID:
             if len(context.args) != 1 or (not re.fullmatch(r"[0-9]{4}", context.args[0])):
                 context.bot.send_message(chat_id=update.effective_chat.id,

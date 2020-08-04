@@ -178,7 +178,7 @@ vs_handler = CommandHandler('vs', vs)
 del_handler = CommandHandler(['del', 'eva', 'evande'], del_)
 mute_handler = CommandHandler('mute', mute)
 lottery_help_handler = CommandHandler(['lhelp'], weekly_lottery_help)
-lottery_handler = CommandHandler(['l', 'lotto'], weekly_lottery.buy_lottey)
+lottery_handler = CommandHandler(['l', 'lotto'], weekly_lottery.buy_lottery)
 sticker_blacklist_loop = MessageHandler(Filters.sticker, sticker_monitor)
 mute_loop = MessageHandler(Filters.all, mute_loop)
 
