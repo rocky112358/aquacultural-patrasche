@@ -1,4 +1,5 @@
 import os
+import random
 import re
 
 from sqlalchemy import create_engine
@@ -40,8 +41,12 @@ class WeeklyLottery:
             if current_user and current_user.balance >= 100:
                 current_user.balance -= 100
             else:
+                if random.random() > 0.8:
+                    message = "돈없으면 꺼져"
+                else:
+                    message = "구매 불가"
                 context.bot.send_message(chat_id=update.effective_chat.id,
-                                         text="구매 불가",
+                                         text=message,
                                          reply_to_message_id=update.message.message_id,
                                          parse_mode='html')
                 return
