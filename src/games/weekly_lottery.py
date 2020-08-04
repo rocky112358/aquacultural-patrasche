@@ -4,6 +4,8 @@ import re
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
+from models.weekly_lottery import User, BuyLog
+
 PATRASCHE_ROOTDIR = os.getenv('PATRASCHE_ROOTDIR')
 TELEGRAM_API_TOKEN = os.getenv('TELEGRAM_API_TOKEN')
 
@@ -34,8 +36,22 @@ class WeeklyLottery:
                                          parse_mode='html')
                 return
             number = context.args[0]
+            current_user = self.session.query(User).filter(User.account_id == str(update.message.from_user.id)).one()
+            if current_user and current_user.balance >= 100:
+                current_user.balance -= 100
+            else:
+                context.bot.send_message(chat_id=update.effective_chat.id,
+                                         text="구매 불가",
+                                         reply_to_message_id=update.message.message_id,
+                                         parse_mode='html')
+                return
+            new_ticket = BuyLog(update.message.from_user.id)
+
+            self.session.add(current_user)
+            self.session.add(new_ticket)
+            self.session.commit()
             context.bot.send_message(chat_id=update.effective_chat.id,
-                                     text=f"{number} 구매 완료",
+                                     text=f"{number} 구매 완료\n잔고: {current_user.balance} PTC",
                                      reply_to_message_id=update.message.message_id,
                                      parse_mode='html')
 
