@@ -4,6 +4,8 @@ import logging
 import os
 import random
 
+from games import WeeklyLottery
+
 from telegram.ext import Updater, CommandHandler, MessageHandler
 from telegram.ext.filters import Filters
 from telegram_client import delete_message
@@ -130,7 +132,7 @@ def mute(update, context):
 def sticker_monitor(update, context):
     sticker_blacklist = [
         ('coinone_wow', '1⃣'),  # margin
-        ('coinone_wow', '👍'), # upbit
+        ('coinone_wow', '👍'),  # upbit
         ('BrokenCats', '😡'),  # cat1
         ('BrokenCats', '😡'),  # cat2
         ('SiljeonKejang', '👨\u200d🌾')  # nsfw
@@ -142,26 +144,19 @@ def sticker_monitor(update, context):
 
 # help command
 def help_(update, context):
-    resp_text = "/roll [faces], /r [faces]: [faces]개의 면을 가진 주사위를 굴립니다. 기본값 6\n" \
+    resp_text = "/roll (/r) [faces]: [faces]개의 면을 가진 주사위를 굴립니다. 기본값 6\n" \
                 "/bool, /coin, /tf: 파트라슈가 응/아니로 대답해줍니다.\n" \
                 "/up: 파트라슈가 대화를 밀어올려줍니다\n" \
                 "/vs [list]: /로 구분된 [list]안의 선택지 중에서 하나를 골라줍니다.\n" \
                 "/del, /eva, /evande: 답글로 이렇게 달면 해당 메세지를 삭제합니다. 서로 다른 3명 필요\n" \
-                "/mute: 답글로 이렇게 달면 3분간 해당 사용자의 메세지는 자동으로 지워집니다. 서로 다른 3명 필요\n"
+                "/mute: 답글로 이렇게 달면 3분간 해당 사용자의 메세지는 자동으로 지워집니다. 서로 다른 3명 필요\n" \
+                "/lotto (/l) [number(0000~9999)]: 주간복권을 구매합니다. (야옹장에서만 가능)"
     context.bot.send_message(chat_id=update.effective_chat.id, text=resp_text)
 
 
-def patrasche_coin_help(update, context):
+def weekly_lottery_help(update, context):
     help_text = """
-1 bark = 2520PTC 소비
-채굴: bark 시 online 상태인 다른유저와 파트라슈가 2520PTC를 1/n로 나눠가짐
-
-<확률표>
-월월!, 멍멍!, 컹컹! (70.3125%)
-파트라슈는 안전자산! (25%): 2520PTC 반환, 채굴 없음
-크르릉... (3.125%): 파트라슈가 1260PTC(1/2 bark) 추가 징수
-옹야 (0.78125%)
-야옹 (0.78125%): 야옹 카운트 +1, 파트라슈 잔고의 절반 획득
+준비중
 """
     context.bot.send_message(chat_id=update.effective_chat.id, text=help_text,
                              reply_to_message_id=update.message.message_id)
@@ -171,8 +166,7 @@ def err_handler(update, context):
     logger.warning('Update "%s" caused error "%s"', update, context.error)
 
 
-# patrasche coin (closed)
-# patrasche_coin = PatrascheCoin()
+weekly_lottery = WeeklyLottery()
 
 # handlers
 roll_handler = CommandHandler(['roll', 'r'], roll)
@@ -183,10 +177,14 @@ help_handler = CommandHandler('help', help_)
 vs_handler = CommandHandler('vs', vs)
 del_handler = CommandHandler(['del', 'eva', 'evande'], del_)
 mute_handler = CommandHandler('mute', mute)
+lottery_help_handler = CommandHandler(['lhelp'], weekly_lottery_help)
+lottery_handler = CommandHandler(['l', 'lotto'], weekly_lottery.buy_lottey)
 sticker_blacklist_loop = MessageHandler(Filters.sticker, sticker_monitor)
 mute_loop = MessageHandler(Filters.all, mute_loop)
 
 # add handlers to dispatcher
+dispatcher.add_handler(lottery_help_handler)
+dispatcher.add_handler(lottery_handler)
 dispatcher.add_handler(roll_handler)
 dispatcher.add_handler(tf_handler)
 dispatcher.add_handler(bark_handler)
