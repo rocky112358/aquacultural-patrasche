@@ -39,9 +39,9 @@ class WeeklyLottery:
             user = self.session.query(User).filter(User.account_id == ticket.account_id).one()
             if ticket.number == number:  # pay 1st prize
                 user.balance += TICKET_PRICE * 195
-            elif ticket.number[1:] % 1000 == number[1:]:  # pay 2nd prize
+            elif ticket.number[1:] == number[1:]:  # pay 2nd prize
                 user.balance += TICKET_PRICE * 25
-            elif ticket.number[2:] % 100 == number[2:]:  # pay 3rd prize
+            elif ticket.number[2:] == number[2:]:  # pay 3rd prize
                 user.balance += TICKET_PRICE * 12
             elif ticket.number[3:] == number[3:]:  # pay 4th prize
                 user.balance += TICKET_PRICE * 5
