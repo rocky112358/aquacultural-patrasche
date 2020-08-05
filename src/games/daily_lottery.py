@@ -42,16 +42,16 @@ class DailyLottery:
         for ticket in tickets:  # current EV: 1.05
             user = self.session.query(User).filter(User.account_id == ticket.account_id).one()
             if ticket.number == number:  # pay 1st prize
-                first += f"<b>{ticket.number}</b> - {user.name}"
+                first += f"<b>{ticket.number}</b> - {user.name}\n"
                 user.balance += TICKET_PRICE * 195
             elif ticket.number[1:] == number[1:]:  # pay 2nd prize
-                second += f"{ticket.number[:1]}<b>{ticket.number[1:]}</b> - {user.name}"
+                second += f"{ticket.number[:1]}<b>{ticket.number[1:]}</b> - {user.name}\n"
                 user.balance += TICKET_PRICE * 25
             elif ticket.number[2:] == number[2:]:  # pay 3rd prize
-                third += f"{ticket.number[:2]}<b>{ticket.number[2:]}</b> - {user.name}"
+                third += f"{ticket.number[:2]}<b>{ticket.number[2:]}</b> - {user.name}\n"
                 user.balance += TICKET_PRICE * 12
             elif ticket.number[3:] == number[3:]:  # pay 4th prize
-                fourth += f"{ticket.number[:3]}<b>{ticket.number[3:]}</b> - {user.name}"
+                fourth += f"{ticket.number[:3]}<b>{ticket.number[3:]}</b> - {user.name}\n"
                 user.balance += TICKET_PRICE * 5
             else:  # pay 5th prize
                 user.balance += TICKET_PRICE * 0.5
