@@ -1,2 +1,2 @@
 from .nyantrasche import Nyantrasche
-from .weekly_lottery import WeeklyLottery
+from .daily_lottery import DailyLottery

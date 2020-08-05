@@ -7,7 +7,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 from api import send_message
-from models.weekly_lottery import User, BuyLog
+from models.daily_lottery import User, BuyLog
 
 PATRASCHE_ROOTDIR = os.getenv('PATRASCHE_ROOTDIR')
 TELEGRAM_API_TOKEN = os.getenv('TELEGRAM_API_TOKEN')
@@ -16,7 +16,7 @@ MEOW_GROUP_ID = -1001265183135
 TICKET_PRICE = 100
 
 
-class WeeklyLottery:
+class DailyLottery:
     def __init__(self):
         if PATRASCHE_ROOTDIR is None:
             print("ERROR: Set PATRASCHE_ROOTDIR")

@@ -4,7 +4,7 @@ import logging
 import os
 import random
 
-from games import WeeklyLottery
+from games import DailyLottery
 
 from telegram.ext import Updater, CommandHandler, MessageHandler
 from telegram.ext.filters import Filters
@@ -166,7 +166,7 @@ def err_handler(update, context):
     logger.warning('Update "%s" caused error "%s"', update, context.error)
 
 
-weekly_lottery = WeeklyLottery()
+weekly_lottery = DailyLottery()
 
 # handlers
 roll_handler = CommandHandler(['roll', 'r'], roll)
