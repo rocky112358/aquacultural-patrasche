@@ -15,7 +15,7 @@ class User(Base):
 class BuyLog(Base):
     __tablename__ = 'tickets'
 
-    fake_pk = Column(Integer, primary_key=True)
+    fake_pk = Column(Integer, primary_key=True, autoincrement=True)
     account_id = Column(Integer)
     number = Column(Integer)
 
