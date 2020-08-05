@@ -34,7 +34,7 @@ class WeeklyLottery:
         return result
 
     def _pay_lottery(self, number):
-        tickets = self.session.query(BuyLog).all()
+        tickets = self.session.query(BuyLog.account_id, BuyLog.number).all()
         for ticket in tickets:  # current EV: 1.05
             user = self.session.query(User).filter(User.account_id == ticket.account_id).one()
             if ticket.number == number:  # pay 1st prize
