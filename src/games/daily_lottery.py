@@ -125,11 +125,7 @@ class DailyLottery:
         number = self._spin_lottery()
         bot.send_message(MEOW_GROUP_ID, f"<b>{number}</b>")
         self._pay_lottery(number)
-        users = self.session.query(User).all()
-        msg = ""
-        for each in users:
-            msg += f"{each.name}: {each.balance} Ᵽ\n"
-        bot.send_message(MEOW_GROUP_ID, msg)
+
         bot.send_message(MEOW_GROUP_ID, f"끝")
 
     def list_tickets(self):
