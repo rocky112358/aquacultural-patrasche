@@ -49,7 +49,7 @@ class WeeklyLottery:
                 user.balance += TICKET_PRICE * 0.5
             self.session.add(user)
 
-        self.session.delete(tickets)
+        self.session.delete(self.session.query(BuyLog).all())
         self.session.commit()
 
     def buy_lottery(self, update, context):
