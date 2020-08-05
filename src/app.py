@@ -178,7 +178,7 @@ vs_handler = CommandHandler('vs', vs)
 del_handler = CommandHandler(['del', 'eva', 'evande'], del_)
 mute_handler = CommandHandler('mute', mute)
 
-lottery_help_handler = CommandHandler(['lhelp'], daily_lottery_help())
+lottery_help_handler = CommandHandler(['lhelp'], daily_lottery_help)
 lottery_buy_handler = CommandHandler(['l', 'lotto'], daily_lottery.buy_lottery)
 lottery_balance_handler = CommandHandler(['ba', 'bal', 'balance'], daily_lottery.print_balance)
 
