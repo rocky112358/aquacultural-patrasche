@@ -154,7 +154,7 @@ def help_(update, context):
     context.bot.send_message(chat_id=update.effective_chat.id, text=resp_text)
 
 
-def weekly_lottery_help(update, context):
+def daily_lottery_help(update, context):
     help_text = """
 준비중
 """
@@ -166,7 +166,7 @@ def err_handler(update, context):
     logger.warning('Update "%s" caused error "%s"', update, context.error)
 
 
-weekly_lottery = DailyLottery()
+daily_lottery = DailyLottery()
 
 # handlers
 roll_handler = CommandHandler(['roll', 'r'], roll)
@@ -177,14 +177,18 @@ help_handler = CommandHandler('help', help_)
 vs_handler = CommandHandler('vs', vs)
 del_handler = CommandHandler(['del', 'eva', 'evande'], del_)
 mute_handler = CommandHandler('mute', mute)
-lottery_help_handler = CommandHandler(['lhelp'], weekly_lottery_help)
-lottery_handler = CommandHandler(['l', 'lotto'], weekly_lottery.buy_lottery)
+
+lottery_help_handler = CommandHandler(['lhelp'], daily_lottery_help())
+lottery_buy_handler = CommandHandler(['l', 'lotto'], daily_lottery.buy_lottery)
+lottery_balance_handler = CommandHandler(['ba', 'bal', 'balance'], daily_lottery.print_balance)
+
 sticker_blacklist_loop = MessageHandler(Filters.sticker, sticker_monitor)
 mute_loop = MessageHandler(Filters.all, mute_loop)
 
 # add handlers to dispatcher
 dispatcher.add_handler(lottery_help_handler)
-dispatcher.add_handler(lottery_handler)
+dispatcher.add_handler(lottery_buy_handler)
+dispatcher.add_handler(lottery_balance_handler)
 dispatcher.add_handler(roll_handler)
 dispatcher.add_handler(tf_handler)
 dispatcher.add_handler(bark_handler)
