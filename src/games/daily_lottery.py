@@ -60,7 +60,7 @@ class DailyLottery:
         self.session.query(BuyLog).delete()
         self.session.commit()
 
-        msg = "[결과]\n"
+        msg = "[일일복권 결과]\n"
         msg += "[1등상]\n"
         msg += f"{first if first else '-'}\n"
         msg += "[2등상]\n"
