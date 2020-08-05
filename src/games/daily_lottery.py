@@ -94,8 +94,10 @@ class DailyLottery:
                 return
             number = context.args[0]
             current_user = self.session.query(User).filter(User.account_id == str(update.message.from_user.id)).one()
+            patrasche = self.session.query(User).filter(User.account_id == "patrasche").one()
             if current_user and current_user.balance >= TICKET_PRICE:
                 current_user.balance -= TICKET_PRICE
+                patrasche.balance += TICKET_PRICE
             else:
                 if random.random() > 0.8:
                     message = "돈없으면 꺼져"
@@ -109,6 +111,7 @@ class DailyLottery:
             new_ticket = BuyLog(update.message.from_user.id, number)
 
             self.session.add(current_user)
+            self.session.add(patrasche)
             self.session.add(new_ticket)
             self.session.commit()
             context.bot.send_message(chat_id=update.effective_chat.id,
