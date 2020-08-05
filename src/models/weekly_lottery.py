@@ -1,14 +1,15 @@
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer
+from sqlalchemy import Column, Integer, String
 
 Base = declarative_base()
 
 
 class User(Base):
-    __tablename__ = 'user_balance'
+    __tablename__ = 'users'
 
     account_id = Column(Integer, primary_key=True)
     balance = Column(Integer)
+    name = Column(String)
 
 
 class BuyLog(Base):
