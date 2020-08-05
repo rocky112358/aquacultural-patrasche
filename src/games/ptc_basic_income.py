@@ -9,6 +9,8 @@ from models.daily_lottery import User
 PATRASCHE_ROOTDIR = os.getenv('PATRASCHE_ROOTDIR')
 TELEGRAM_API_TOKEN = os.getenv('TELEGRAM_API_TOKEN')
 
+MEOW_GROUP_ID = -1001265183135
+
 engine = create_engine(f"sqlite:///{PATRASCHE_ROOTDIR}weekly_lottery.sqlite")
 Session = sessionmaker(bind=engine)
 session = Session()
@@ -28,9 +30,9 @@ def pay_basic_income():
             session.add(user)
         session.add(patrasche)
         session.commit()
-        bot.send_message(-1001265183135, f"[기본소득] 지급완료")
+        bot.send_message(MEOW_GROUP_ID, f"[기본소득] 지급완료")
     else:
-        bot.send_message(-1001265183135, f"[기본소득] 잔고부족")
+        bot.send_message(MEOW_GROUP_ID, f"[기본소득] 잔고부족")
 
 
 if __name__ == '__main__':
