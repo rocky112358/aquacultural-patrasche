@@ -71,6 +71,17 @@ class DailyLottery:
         msg += f"{fourth if fourth else '-'}\n"
         send_message(msg)
 
+    def print_balance(self, update, context):
+        if update.message.chat.id == MEOW_GROUP_ID:
+            msg = "[개인잔고]\n"
+            users = self.session.query(User).order_by(User.name).all()
+            for user in users:
+                msg += f"{user.name}: {user.balance:,} Ᵽ\n"
+            context.bot.send_message(chat_id=update.effective_chat.id,
+                                     text=msg,
+                                     reply_to_message_id=update.message.message_id,
+                                     parse_mode='html')
+
     def buy_lottery(self, update, context):
         if update.message.chat.id == MEOW_GROUP_ID:
             if len(context.args) != 1 or (not re.fullmatch(r"[0-9]{4}", context.args[0])):
