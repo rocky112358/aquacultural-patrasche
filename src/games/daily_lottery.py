@@ -122,8 +122,10 @@ class DailyLottery:
     def run_lottery(self):
         bot.send_message(MEOW_GROUP_ID, f"5초 후에 추첨을 시작합니다.")
         time.sleep(5)
+
         number = self._spin_lottery()
-        bot.send_message(MEOW_GROUP_ID, f"<b>{number}</b>")
+        bot.send_message(MEOW_GROUP_ID, f"<b>{number}</b>", parse_mode="HTML")
+
         self._pay_lottery(number)
 
         bot.send_message(MEOW_GROUP_ID, f"끝")
