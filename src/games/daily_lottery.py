@@ -34,16 +34,24 @@ class DailyLottery:
         return result
 
     def _pay_lottery(self, number):
+        first = ""
+        second = ""
+        third = ""
+        fourth = ""
         tickets = self.session.query(BuyLog.account_id, BuyLog.number).all()
         for ticket in tickets:  # current EV: 1.05
             user = self.session.query(User).filter(User.account_id == ticket.account_id).one()
             if ticket.number == number:  # pay 1st prize
+                first += f"<b>{ticket.number}</b> - {user.name}"
                 user.balance += TICKET_PRICE * 195
             elif ticket.number[1:] == number[1:]:  # pay 2nd prize
+                second += f"{ticket.number[:1]}<b>{ticket.number[1:]}</b> - {user.name}"
                 user.balance += TICKET_PRICE * 25
             elif ticket.number[2:] == number[2:]:  # pay 3rd prize
+                third += f"{ticket.number[:2]}<b>{ticket.number[2:]}</b> - {user.name}"
                 user.balance += TICKET_PRICE * 12
             elif ticket.number[3:] == number[3:]:  # pay 4th prize
+                fourth += f"{ticket.number[:3]}<b>{ticket.number[3:]}</b> - {user.name}"
                 user.balance += TICKET_PRICE * 5
             else:  # pay 5th prize
                 user.balance += TICKET_PRICE * 0.5
@@ -51,6 +59,17 @@ class DailyLottery:
 
         self.session.query(BuyLog).delete()
         self.session.commit()
+
+        msg = "[결과]\n"
+        msg += "[1등상]\n"
+        msg += f"{first if first else '-'}\n"
+        msg += "[2등상]\n"
+        msg += f"{second if second else '-'}\n"
+        msg += "[3등상]\n"
+        msg += f"{third if third else '-'}\n"
+        msg += "[4등상]\n"
+        msg += f"{fourth if fourth else '-'}\n"
+        send_message(msg)
 
     def buy_lottery(self, update, context):
         if update.message.chat.id == MEOW_GROUP_ID:
