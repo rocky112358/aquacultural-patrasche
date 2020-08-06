@@ -116,7 +116,7 @@ class DailyLottery:
                 if re.fullmatch(r"^[0-9]{4}(?: [0-9]{4})*$", ' '.join(context.args[0:])):  # purchase multiple tickets
                     numbers = context.args[0:]
                     self._take_ptc(current_user, TICKET_PRICE * len(numbers))
-                elif update.message.text.split(" ")[0] in ['/a', '/auto'] and re.fullmatch(r"[0-9]+"):  # purchase auto tickets
+                elif update.message.text.split(" ")[0] in ['/a', '/auto'] and re.fullmatch(r"^[0-9]+$", context.args[0]):  # purchase auto tickets
                     num_tickets = int(context.args[0])
                     self._take_ptc(current_user, TICKET_PRICE * len(num_tickets))
                     numbers = []
