@@ -21,7 +21,7 @@ bot = telegram.Bot(TELEGRAM_API_TOKEN)
 
 
 def pay_basic_income():
-    patrasche = session.query(User).filter(User.account_id == 0).one()
+    patrasche = session.query(User).filter(User.account_id == "patrasche").one()
     users = session.query(User).all()
     if patrasche.balance >= BASIC_INCOME_AMOUNT * len(users):
         patrasche.balance -= BASIC_INCOME_AMOUNT * len(users)
