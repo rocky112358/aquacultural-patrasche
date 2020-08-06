@@ -121,7 +121,7 @@ class DailyLottery:
                     self._take_ptc(current_user, TICKET_PRICE * num_tickets)
                     numbers = []
                     for _ in range(num_tickets):
-                        numbers += [self.run_lottery()]
+                        numbers += [self._spin_lottery()]
                 else:
                     context.bot.send_message(chat_id=update.effective_chat.id,
                                              text="4자리 숫자를 입력해주세요 0000~9999",
