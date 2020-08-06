@@ -104,7 +104,7 @@ class DailyLottery:
 
     def buy_lottery(self, update, context):
         if update.message.chat.id == MEOW_GROUP_ID:
-            if len(context.args) < 1 or (not re.fullmatch(r"^[0-9]{4}(?: [0-9]{4})*$", ' '.join(context.args[0:]))):
+            if len(context.args) < 1:
                 context.bot.send_message(chat_id=update.effective_chat.id,
                                          text="4자리 숫자를 입력해주세요 0000~9999",
                                          reply_to_message_id=update.message.message_id,
@@ -122,6 +122,12 @@ class DailyLottery:
                     numbers = []
                     for _ in range(num_tickets):
                         numbers += [self.run_lottery()]
+                else:
+                    context.bot.send_message(chat_id=update.effective_chat.id,
+                                             text="4자리 숫자를 입력해주세요 0000~9999",
+                                             reply_to_message_id=update.message.message_id,
+                                             parse_mode='html')
+                    return
             except ValueError:
                 return
 
