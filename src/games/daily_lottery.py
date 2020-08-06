@@ -86,18 +86,19 @@ class DailyLottery:
 
     def buy_lottery(self, update, context):
         if update.message.chat.id == MEOW_GROUP_ID:
-            if len(context.args) != 1 or (not re.fullmatch(r"[0-9]{4}", context.args[0])):
+            if len(context.args) < 1 or (not re.fullmatch(r"[^[0-9]{4}(?: [0-9]{4})*$", context.args[0:].join(" "))):
                 context.bot.send_message(chat_id=update.effective_chat.id,
                                          text="4자리 숫자를 입력해주세요 0000~9999",
                                          reply_to_message_id=update.message.message_id,
                                          parse_mode='html')
                 return
-            number = context.args[0]
+
+            numbers = context.args[0:]
             current_user = self.session.query(User).filter(User.account_id == str(update.message.from_user.id)).one()
             patrasche = self.session.query(User).filter(User.account_id == "patrasche").one()
-            if current_user and current_user.balance >= TICKET_PRICE:
-                current_user.balance -= TICKET_PRICE
-                patrasche.balance += TICKET_PRICE
+            if current_user.balance >= TICKET_PRICE * len(numbers):
+                current_user.balance -= TICKET_PRICE * len(numbers)
+                patrasche.balance += TICKET_PRICE * len(numbers)
             else:
                 if random.random() > 0.8:
                     message = "돈없으면 꺼져"
@@ -108,14 +109,16 @@ class DailyLottery:
                                          reply_to_message_id=update.message.message_id,
                                          parse_mode='html')
                 return
-            new_ticket = BuyLog(update.message.from_user.id, number)
-
             self.session.add(current_user)
             self.session.add(patrasche)
-            self.session.add(new_ticket)
+
+            for number in numbers:
+                new_ticket = BuyLog(update.message.from_user.id, number)
+                self.session.add(new_ticket)
+
             self.session.commit()
             context.bot.send_message(chat_id=update.effective_chat.id,
-                                     text=f"{number} 구매 완료\n잔고: {current_user.balance} Ᵽ",
+                                     text=f"{numbers.join(' ')} 구매 완료\n잔고: {current_user.balance} Ᵽ",
                                      reply_to_message_id=update.message.message_id,
                                      parse_mode='html')
 
