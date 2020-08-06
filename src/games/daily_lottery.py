@@ -84,6 +84,24 @@ class DailyLottery:
                                      reply_to_message_id=update.message.message_id,
                                      parse_mode='html')
 
+    def _take_ptc(self, current_user, amount):
+        patrasche = self.session.query(User).filter(User.account_id == "patrasche").one()
+        if current_user.balance >= amount:
+            current_user.balance -= amount
+            patrasche.balance += amount
+            self.session.add(current_user)
+            self.session.add(patrasche)
+        else:
+            if random.random() > 0.8:
+                message = "돈없으면 꺼져"
+            else:
+                message = "잔고가 부족합니다"
+            bot.send_message(chat_id=update.effective_chat.id,
+                                     text=message,
+                                     reply_to_message_id=update.message.message_id,
+                                     parse_mode='html')
+            raise ValueError
+
     def buy_lottery(self, update, context):
         if update.message.chat.id == MEOW_GROUP_ID:
             if len(context.args) < 1 or (not re.fullmatch(r"^[0-9]{4}(?: [0-9]{4})*$", ' '.join(context.args[0:]))):
@@ -93,24 +111,19 @@ class DailyLottery:
                                          parse_mode='html')
                 return
 
-            numbers = context.args[0:]
             current_user = self.session.query(User).filter(User.account_id == str(update.message.from_user.id)).one()
-            patrasche = self.session.query(User).filter(User.account_id == "patrasche").one()
-            if current_user.balance >= TICKET_PRICE * len(numbers):
-                current_user.balance -= TICKET_PRICE * len(numbers)
-                patrasche.balance += TICKET_PRICE * len(numbers)
-            else:
-                if random.random() > 0.8:
-                    message = "돈없으면 꺼져"
-                else:
-                    message = "잔고가 부족합니다"
-                context.bot.send_message(chat_id=update.effective_chat.id,
-                                         text=message,
-                                         reply_to_message_id=update.message.message_id,
-                                         parse_mode='html')
+            try:
+                if re.fullmatch(r"^[0-9]{4}(?: [0-9]{4})*$", ' '.join(context.args[0:])):  # purchase multiple tickets
+                    numbers = context.args[0:]
+                    self._take_ptc(current_user, TICKET_PRICE * len(numbers))
+                elif update.message.text.split(" ")[0] in ['/a', '/auto'] and re.fullmatch(r"[0-9]+"):  # purchase auto tickets
+                    num_tickets = int(context.args[0])
+                    self._take_ptc(current_user, TICKET_PRICE * len(num_tickets))
+                    numbers = []
+                    for _ in range(num_tickets):
+                        numbers += [self.run_lottery()]
+            except ValueError:
                 return
-            self.session.add(current_user)
-            self.session.add(patrasche)
 
             for number in numbers:
                 new_ticket = BuyLog(update.message.from_user.id, number)
