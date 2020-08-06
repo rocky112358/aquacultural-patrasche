@@ -118,7 +118,7 @@ class DailyLottery:
                     self._take_ptc(current_user, TICKET_PRICE * len(numbers))
                 elif update.message.text.split(" ")[0] in ['/a', '/auto'] and re.fullmatch(r"^[0-9]+$", context.args[0]):  # purchase auto tickets
                     num_tickets = int(context.args[0])
-                    self._take_ptc(current_user, TICKET_PRICE * len(num_tickets))
+                    self._take_ptc(current_user, TICKET_PRICE * num_tickets)
                     numbers = []
                     for _ in range(num_tickets):
                         numbers += [self.run_lottery()]
