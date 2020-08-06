@@ -103,7 +103,7 @@ class DailyLottery:
                 if random.random() > 0.8:
                     message = "돈없으면 꺼져"
                 else:
-                    message = "구매 불가"
+                    message = "잔고가 부족합니다"
                 context.bot.send_message(chat_id=update.effective_chat.id,
                                          text=message,
                                          reply_to_message_id=update.message.message_id,
