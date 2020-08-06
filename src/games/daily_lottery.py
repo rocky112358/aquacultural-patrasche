@@ -113,15 +113,15 @@ class DailyLottery:
 
             current_user = self.session.query(User).filter(User.account_id == str(update.message.from_user.id)).one()
             try:
-                if re.fullmatch(r"^[0-9]{4}(?: [0-9]{4})*$", ' '.join(context.args[0:])):  # purchase multiple tickets
-                    numbers = context.args[0:]
-                    self._take_ptc(current_user, TICKET_PRICE * len(numbers))
-                elif update.message.text.split(" ")[0] in ['/a', '/auto'] and re.fullmatch(r"^[0-9]+$", context.args[0]):  # purchase auto tickets
+                if update.message.text.split(" ")[0] in ['/a', '/auto'] and re.fullmatch(r"^[0-9]+$", context.args[0]):  # purchase tickets with random number
                     num_tickets = int(context.args[0])
                     self._take_ptc(current_user, TICKET_PRICE * num_tickets)
                     numbers = []
                     for _ in range(num_tickets):
                         numbers += [self._spin_lottery()]
+                elif re.fullmatch(r"^[0-9]{4}(?: [0-9]{4})*$", ' '.join(context.args[0:])):  # purchase multiple tickets
+                    numbers = context.args[0:]
+                    self._take_ptc(current_user, TICKET_PRICE * len(numbers))
                 else:
                     context.bot.send_message(chat_id=update.effective_chat.id,
                                              text="4자리 숫자를 입력해주세요 0000~9999",
