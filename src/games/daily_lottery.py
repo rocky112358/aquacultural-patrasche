@@ -71,7 +71,7 @@ class DailyLottery:
         msg += f"{third if third else '-'}\n"
         msg += "[4등상]\n"
         msg += f"{fourth if fourth else '-'}\n"
-        bot.send_message(MEOW_GROUP_ID, msg)
+        bot.send_message(MEOW_GROUP_ID, msg, parse_mode="HTML")
 
     def print_balance(self, update, context):
         if update.message.chat.id == MEOW_GROUP_ID:
