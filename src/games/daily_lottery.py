@@ -86,7 +86,7 @@ class DailyLottery:
 
     def buy_lottery(self, update, context):
         if update.message.chat.id == MEOW_GROUP_ID:
-            if len(context.args) < 1 or (not re.fullmatch(r"[^[0-9]{4}(?: [0-9]{4})*$", context.args[0:].join(" "))):
+            if len(context.args) < 1 or (not re.fullmatch(r"[^[0-9]{4}(?: [0-9]{4})*$", ' '.join(context.args[0:]))):
                 context.bot.send_message(chat_id=update.effective_chat.id,
                                          text="4자리 숫자를 입력해주세요 0000~9999",
                                          reply_to_message_id=update.message.message_id,
@@ -118,7 +118,7 @@ class DailyLottery:
 
             self.session.commit()
             context.bot.send_message(chat_id=update.effective_chat.id,
-                                     text=f"{numbers.join(' ')} 구매 완료\n잔고: {current_user.balance} Ᵽ",
+                                     text=f"{' '.join(numbers)} 구매 완료\n잔고: {current_user.balance} Ᵽ",
                                      reply_to_message_id=update.message.message_id,
                                      parse_mode='html')
 
