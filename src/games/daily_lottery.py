@@ -96,10 +96,7 @@ class DailyLottery:
                 message = "돈없으면 꺼져"
             else:
                 message = "잔고가 부족합니다"
-            bot.send_message(chat_id=update.effective_chat.id,
-                                     text=message,
-                                     reply_to_message_id=update.message.message_id,
-                                     parse_mode='html')
+            bot.send_message(MEOW_GROUP_ID, message)
             raise ValueError
 
     def buy_lottery(self, update, context):
