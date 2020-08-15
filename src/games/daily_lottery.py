@@ -168,7 +168,7 @@ class DailyLottery:
             msg = "[통계]\n"
             users = self.session.query(User).filter(User.account_id.notin_(['0', 'patrasche'])).order_by(User.name).all()
             for user in users:
-                msg += f"{user.name}: {user.total_ticket:}장 | {user.total_prize:,} Ᵽ | {user.total_prize/user.total_ticket:.2f} Ᵽ/장\n"
+                msg += f"{user.name}: {user.total_ticket:}장 | {user.total_prize:,} Ᵽ | {user.total_prize/user.total_ticket if user.total_ticket != 0 else 0:.2f} Ᵽ/장\n"
             context.bot.send_message(chat_id=update.effective_chat.id,
                                      text=msg,
                                      reply_to_message_id=update.message.message_id,
