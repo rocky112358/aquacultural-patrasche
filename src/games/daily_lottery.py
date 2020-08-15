@@ -108,21 +108,22 @@ class DailyLottery:
         if update.message.chat.id == MEOW_GROUP_ID:
             current_user = self.session.query(User).filter(User.account_id == str(update.message.from_user.id)).one()
             try:
-                if update.message.text.split(" ")[0] in ['/a', '/auto'] and re.fullmatch(r"^[1-9]\d*$", context.args[0]):  # purchase tickets with random number
-                    num_tickets = int(context.args[0])
-                    self._take_ptc(current_user, TICKET_PRICE * num_tickets)
-                    numbers = []
-                    for _ in range(num_tickets):
-                        numbers += [self._spin_lottery()]
+                if len(context.args) > 0 and re.fullmatch(r"^[1-9]\d*$", context.args[0]):
+                    if update.message.text.split(" ")[0] in ['/a', '/auto']:
+                        num_tickets = int(context.args[0])
+                        self._take_ptc(current_user, TICKET_PRICE * num_tickets)
+                        numbers = []
+                        for _ in range(num_tickets):
+                            numbers += [self._spin_lottery()]
+                    else:
+                        numbers = context.args[0:]
+                        self._take_ptc(current_user, TICKET_PRICE * len(numbers))
                 elif update.message.text in ['/a', '/auto']:
                     context.bot.send_message(chat_id=update.effective_chat.id,
                                              text="1 이상의 정수를 입력해주세요",
                                              reply_to_message_id=update.message.message_id,
                                              parse_mode='html')
                     return
-                elif re.fullmatch(r"^[0-9]{4}(?: [0-9]{4})*$", ' '.join(context.args[0:])):  # purchase multiple tickets
-                    numbers = context.args[0:]
-                    self._take_ptc(current_user, TICKET_PRICE * len(numbers))
                 else:
                     context.bot.send_message(chat_id=update.effective_chat.id,
                                              text="4자리 숫자를 입력해주세요 0000~9999",
