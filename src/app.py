@@ -158,7 +158,7 @@ def daily_lottery_help(update, context):
     help_text = "/lotto (/l) [number(0000~9999)]: 일간복권을 구매합니다. (야옹장에서만 가능)\n" \
                 "/balance (/ba, /bal): 전체 유저의 PTC 잔고를 확인합니다. (야옹장에서만 가능)\n" \
                 "/auto (/a) [number(1~)]: 자동으로 [number]장의 복권을 구매합니다. (야옹장에서만 가능) \n" \
-                "/stat (/s): 복권 통계를 출력합니다. (야옹장에서만 가능)"
+                "/stat (/s): 일일복권 구매장수/당첨금액을 출력합니다. (야옹장에서만 가능)"
 
     context.bot.send_message(chat_id=update.effective_chat.id, text=help_text,
                              reply_to_message_id=update.message.message_id)
