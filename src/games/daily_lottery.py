@@ -160,7 +160,7 @@ class DailyLottery:
     def print_lottery_stat(self, update, context):
         if update.message.chat.id == MEOW_GROUP_ID:
             msg = "[통계]\n"
-            users = self.session.query(User).filter(User.account_id not in [0, 'patrasche']).order_by(User.name).all()
+            users = self.session.query(User).filter(User.account_id.notin_(['0', 'patrasche'])).order_by(User.name).all()
             for user in users:
                 msg += f"{user.name}: {user.total_ticket:,}장 / {user.total_prize} Ᵽ\n"
             context.bot.send_message(chat_id=update.effective_chat.id,
