@@ -150,16 +150,16 @@ def help_(update, context):
                 "/vs [list]: /로 구분된 [list]안의 선택지 중에서 하나를 골라줍니다.\n" \
                 "/del, /eva, /evande: 답글로 이렇게 달면 해당 메세지를 삭제합니다. 서로 다른 3명 필요\n" \
                 "/mute: 답글로 이렇게 달면 3분간 해당 사용자의 메세지는 자동으로 지워집니다. 서로 다른 3명 필요\n" \
-                "/lotto (/l) [number(0000~9999)]: 일간복권을 구매합니다. (야옹장에서만 가능)\n" \
-                "/balance (/ba, /bal): 전체 유저의 PTC 잔고를 확인합니다. (야옹장에서만 가능)\n" \
-                "/auto (/a) [number(1~)]: 자동으로 [number]장의 복권을 구매합니다. (야옹장에서만 가능)"
+
     context.bot.send_message(chat_id=update.effective_chat.id, text=resp_text)
 
 
 def daily_lottery_help(update, context):
-    help_text = """
-준비중
-"""
+    help_text = "/lotto (/l) [number(0000~9999)]: 일간복권을 구매합니다. (야옹장에서만 가능)\n" \
+                "/balance (/ba, /bal): 전체 유저의 PTC 잔고를 확인합니다. (야옹장에서만 가능)\n" \
+                "/auto (/a) [number(1~)]: 자동으로 [number]장의 복권을 구매합니다. (야옹장에서만 가능) \n" \
+                "/stat (/s): 복권 통계를 출력합니다. (야옹장에서만 가능)"
+
     context.bot.send_message(chat_id=update.effective_chat.id, text=help_text,
                              reply_to_message_id=update.message.message_id)
 
@@ -183,11 +183,13 @@ mute_handler = CommandHandler('mute', mute)
 lottery_help_handler = CommandHandler(['lhelp'], daily_lottery_help)
 lottery_buy_handler = CommandHandler(['l', 'lotto', 'a', 'auto'], daily_lottery.buy_lottery)
 lottery_balance_handler = CommandHandler(['ba', 'bal', 'balance'], daily_lottery.print_balance)
+lottery_stat_handler = CommandHandler(['s', 'stat'], daily_lottery.print_lottery_stat)
 
 sticker_blacklist_loop = MessageHandler(Filters.sticker, sticker_monitor)
 mute_loop = MessageHandler(Filters.all, mute_loop)
 
 # add handlers to dispatcher
+dispatcher.add_handler(lottery_stat_handler)
 dispatcher.add_handler(lottery_help_handler)
 dispatcher.add_handler(lottery_buy_handler)
 dispatcher.add_handler(lottery_balance_handler)
