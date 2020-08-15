@@ -10,6 +10,8 @@ class User(Base):
     account_id = Column(Integer, primary_key=True)
     balance = Column(Integer)
     name = Column(String)
+    total_ticket = Column(Integer)
+    total_prize = Column(Integer)
 
 
 class BuyLog(Base):
@@ -18,8 +20,6 @@ class BuyLog(Base):
     fake_pk = Column(Integer, primary_key=True, autoincrement=True)
     account_id = Column(Integer)
     number = Column(Integer)
-    total_ticket = Column(Integer)
-    total_prize = Column(Integer)
 
     def __init__(self, account_id, number):
         self.account_id = account_id
