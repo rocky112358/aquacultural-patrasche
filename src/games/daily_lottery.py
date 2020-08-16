@@ -122,7 +122,7 @@ class DailyLottery:
                     else:
                         numbers = context.args[0:]
                         self._take_ptc(current_user, TICKET_PRICE * len(numbers))
-                elif update.message.text in ['/a', '/auto']:
+                elif update.message.text.split(" ")[0] in ['/a', '/auto']:
                     context.bot.send_message(chat_id=update.effective_chat.id,
                                              text="1 이상의 정수를 입력해주세요",
                                              reply_to_message_id=update.message.message_id,
