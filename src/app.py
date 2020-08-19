@@ -4,7 +4,7 @@ import logging
 import os
 import random
 
-from games import DailyLottery
+from games import DailyLottery, Roulette
 
 from telegram.ext import Updater, CommandHandler, MessageHandler
 from telegram.ext.filters import Filters
@@ -169,6 +169,7 @@ def err_handler(update, context):
 
 
 daily_lottery = DailyLottery()
+roulette = Roulette()
 
 # handlers
 roll_handler = CommandHandler(['roll', 'r'], roll)
@@ -185,10 +186,13 @@ lottery_buy_handler = CommandHandler(['l', 'lotto', 'a', 'auto'], daily_lottery.
 lottery_balance_handler = CommandHandler(['ba', 'bal', 'balance'], daily_lottery.print_balance)
 lottery_stat_handler = CommandHandler(['s', 'stat'], daily_lottery.print_lottery_stat)
 
+roulette_bet_handler = CommandHandler(['bet'], roulette.bet)
+
 sticker_blacklist_loop = MessageHandler(Filters.sticker, sticker_monitor)
 mute_loop = MessageHandler(Filters.all, mute_loop)
 
 # add handlers to dispatcher
+dispatcher.add_handler(roulette_bet_handler)
 dispatcher.add_handler(lottery_stat_handler)
 dispatcher.add_handler(lottery_help_handler)
 dispatcher.add_handler(lottery_buy_handler)
