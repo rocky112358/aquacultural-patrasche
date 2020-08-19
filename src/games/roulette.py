@@ -1,6 +1,5 @@
 import os
 
-
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 import telegram
@@ -28,4 +27,7 @@ class Roulette:
     def bet(self, update, context):
         if update.message.chat.id == MEOW_GROUP_ID:
             keyboard = telegram.ReplyKeyboardMarkup([[1], [2, 3, 4, 5], [6, 7, 8], [9, 10]])
-            bot.send_message("Bet down, please.", reply_markup=keyboard)
+            bot.send_message(update.message.chat.id,
+                             "Bet down, please.",
+                             reply_to_message_id=update.message.message_id,
+                             reply_markup=keyboard)
