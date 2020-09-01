@@ -192,7 +192,7 @@ roulette_bet_entrypoint = CommandHandler(['bet'], roulette.bet)
 roulette_bet_handler = Handler(roulette.bet)
 roulette_bet_end = Handler(roulette.bet_end)
 roulette_bet_conv_handler = ConversationHandler(roulette_bet_entrypoint,
-                                                {"betting": roulette_bet_handler, "end": roulette_bet_end}, roulette_bet_end)
+                                                {"betting": roulette_bet_handler, "end": roulette_bet_end}, [roulette_bet_end])
 
 sticker_blacklist_loop = MessageHandler(Filters.sticker, sticker_monitor)
 watch_all = MessageHandler(Filters.all, watch_all)
