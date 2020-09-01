@@ -6,7 +6,7 @@ import random
 
 from games import DailyLottery, Roulette
 
-from telegram.ext import Updater, CommandHandler, MessageHandler
+from telegram.ext import Updater, Handler, CommandHandler, MessageHandler, ConversationHandler
 from telegram.ext.filters import Filters
 from telegram_client import delete_message
 
@@ -113,7 +113,9 @@ def del_(update, context):
 mute_user_dict = defaultdict(lambda: {"voters": set(), "expire": datetime.now() + timedelta(minutes=3)})
 
 
-def mute_loop(update, context):
+def watch_all(update, context)
+    # patrasche
+    # mute loop
     if update.effective_chat.id == -1001254166381 and update.message.from_user.id in mute_user_dict.keys():
         if mute_user_dict[update.message.from_user.id]['expire'] <= datetime.now():
             del mute_user_dict[update.message.from_user.id]
@@ -186,13 +188,17 @@ lottery_buy_handler = CommandHandler(['l', 'lotto', 'a', 'auto'], daily_lottery.
 lottery_balance_handler = CommandHandler(['ba', 'bal', 'balance'], daily_lottery.print_balance)
 lottery_stat_handler = CommandHandler(['s', 'stat'], daily_lottery.print_lottery_stat)
 
-roulette_bet_handler = CommandHandler(['bet'], roulette.bet)
+roulette_bet_entrypoint = CommandHandler(['bet'], roulette.bet)
+roulette_bet_handler = Handler(roulette.bet)
+roulette_bet_end = Handler(roulette.bet_end)
+roulette_bet_conv_handler = ConversationHandler(roulette_bet_entrypoint,
+                                                {"betting": roulette_bet_handler, "end": roulette_bet_end})
 
 sticker_blacklist_loop = MessageHandler(Filters.sticker, sticker_monitor)
-mute_loop = MessageHandler(Filters.all, mute_loop)
+watch_all = MessageHandler(Filters.all, watch_all)
 
 # add handlers to dispatcher
-dispatcher.add_handler(roulette_bet_handler)
+dispatcher.add_handler(roulette_bet_conv_handler)
 dispatcher.add_handler(lottery_stat_handler)
 dispatcher.add_handler(lottery_help_handler)
 dispatcher.add_handler(lottery_buy_handler)
@@ -206,7 +212,7 @@ dispatcher.add_handler(del_handler)
 dispatcher.add_handler(mute_handler)
 dispatcher.add_handler(help_handler)
 dispatcher.add_handler(sticker_blacklist_loop)
-dispatcher.add_handler(mute_loop)
+dispatcher.add_handler(watch_all)
 
 # add an error handler to dispatcher
 dispatcher.add_error_handler(err_handler)
