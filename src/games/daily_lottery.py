@@ -112,28 +112,30 @@ class DailyLottery:
         if update.message.chat.id == MEOW_GROUP_ID:
             current_user = self.session.query(User).filter(User.account_id == str(update.message.from_user.id)).one()
             try:
-                if len(context.args) > 0 and re.fullmatch(r"^[1-9]\d*$", context.args[0]):
-                    if update.message.text.split(" ")[0] in ['/a', '/auto']:
+                if len(context.args) > 0 and update.message.text.split(" ")[0] in ['/a', '/auto']:
+                    if re.fullmatch(r"^[0-9]\d*$", context.args[0]):
                         num_tickets = int(context.args[0])
                         self._take_ptc(current_user, TICKET_PRICE * num_tickets)
                         numbers = []
                         for _ in range(num_tickets):
                             numbers += [self._spin_lottery()]
                     else:
+                        context.bot.send_message(chat_id=update.effective_chat.id,
+                                                 text="1 이상의 정수를 입력해주세요",
+                                                 reply_to_message_id=update.message.message_id,
+                                                 parse_mode='html')
+                        return
+                elif len(context.args) > 0 and update.message.text.split(" ")[0] in ['/l', '/lotto']:
+                    if re.fullmatch(r"^\d{4}(?:\s\d{4})+$", " ".join(context.args[0:])):
                         numbers = context.args[0:]
                         self._take_ptc(current_user, TICKET_PRICE * len(numbers))
-                elif update.message.text.split(" ")[0] in ['/a', '/auto']:
-                    context.bot.send_message(chat_id=update.effective_chat.id,
-                                             text="1 이상의 정수를 입력해주세요",
-                                             reply_to_message_id=update.message.message_id,
-                                             parse_mode='html')
-                    return
-                else:
-                    context.bot.send_message(chat_id=update.effective_chat.id,
-                                             text="4자리 숫자를 입력해주세요 0000~9999",
-                                             reply_to_message_id=update.message.message_id,
-                                             parse_mode='html')
-                    return
+
+                    else:
+                        context.bot.send_message(chat_id=update.effective_chat.id,
+                                                 text="4자리 숫자를 입력해주세요 0000~9999",
+                                                 reply_to_message_id=update.message.message_id,
+                                                 parse_mode='html')
+                        return
             except ValueError:
                 return
 
@@ -166,9 +168,10 @@ class DailyLottery:
     def print_lottery_stat(self, update, context):
         if update.message.chat.id == MEOW_GROUP_ID:
             msg = "[통계]\n"
-            users = self.session.query(User).filter(User.account_id.notin_(['0', 'patrasche'])).order_by(User.name).all()
+            users = self.session.query(User).filter(User.account_id.notin_(['0', 'patrasche'])).order_by(
+                User.name).all()
             for user in users:
-                msg += f"{user.name}: {user.total_ticket:}장 | {user.total_prize:,} Ᵽ | {user.total_prize/user.total_ticket if user.total_ticket != 0 else 0:.2f} Ᵽ/장\n"
+                msg += f"{user.name}: {user.total_ticket:}장 | {user.total_prize:,} Ᵽ | {user.total_prize / user.total_ticket if user.total_ticket != 0 else 0:.2f} Ᵽ/장\n"
             context.bot.send_message(chat_id=update.effective_chat.id,
                                      text=msg,
                                      reply_to_message_id=update.message.message_id,
