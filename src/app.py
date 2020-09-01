@@ -113,7 +113,7 @@ def del_(update, context):
 mute_user_dict = defaultdict(lambda: {"voters": set(), "expire": datetime.now() + timedelta(minutes=3)})
 
 
-def watch_all(update, context)
+def watch_all(update, context):
     # patrasche
     # mute loop
     if update.effective_chat.id == -1001254166381 and update.message.from_user.id in mute_user_dict.keys():
