@@ -132,11 +132,11 @@ class Roulette:
                                  f"Bet {update.message.text}",
                                  reply_to_message_id=update.message.message_id,
                                  reply_markup=keyboard)
+                bot.send_message(update.message.chat.id,
+                                 "Bet down, please.",
+                                 reply_to_message_id=update.message.message_id,
+                                 reply_markup=keyboard)
                 return "betting"
-            bot.send_message(update.message.chat.id,
-                             "Bet down, please.",
-                             reply_to_message_id=update.message.message_id,
-                             reply_markup=keyboard)
             else:
                 return "end"
 
