@@ -126,7 +126,7 @@ class DailyLottery:
                                                  parse_mode='html')
                         return
                 elif len(context.args) > 0 and update.message.text.split(" ")[0] in ['/l', '/lotto']:
-                    if re.fullmatch(r"^\d{4}(?:\s\d{4})+$", " ".join(context.args[0:])):
+                    if re.fullmatch(r"^\d{4}(?:\s\d{4})*$", " ".join(context.args[0:])):
                         numbers = context.args[0:]
                         self._take_ptc(current_user, TICKET_PRICE * len(numbers))
 
