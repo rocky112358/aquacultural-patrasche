@@ -128,16 +128,21 @@ class Roulette:
                 ["S34-36", "34🟥", "34-35", "35⬛️", "35-36", "36🟥"]
             ])
             print(update.message.text)
-            if update.message.text != "End Betting":
-                if update.message.text != '/bet':
-                    bot.send_message(update.message.chat.id,
-                                     f"Bet {update.message.text}",
-                                     reply_to_message_id=update.message.message_id,
-                                     reply_markup=keyboard)
-                return "betting"
-            else:
+            if update.message.text == "End Betting":
                 bot.send_message(update.message.chat.id,
                                  "Good luck!",
                                  reply_to_message_id=update.message.message_id,
                                  reply_markup=telegram.ReplyKeyboardRemove)
                 return ConversationHandler.END
+            else:
+                if update.message.text == '/bet':
+                    bot.send_message(update.message.chat.id,
+                                     "Bet down, please.",
+                                     reply_to_message_id=update.message.message_id,
+                                     reply_markup=keyboard)
+                else:
+                    bot.send_message(update.message.chat.id,
+                                     f"Bet {update.message.text}",
+                                     reply_to_message_id=update.message.message_id,
+                                     reply_markup=keyboard)
+                return "betting"
