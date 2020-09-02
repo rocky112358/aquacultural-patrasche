@@ -99,8 +99,8 @@ class Roulette:
             keyboard = telegram.ReplyKeyboardMarkup([
                 ["End Betting"],
                 ["1to18", "EVEN", "RED🟥", "BLACK⬛️", "ODD", "19to36"],
-                ["1to12", "2nd12", "3rd12"],
-                [" ""1stCol", " ", "2ndCol", " ", "3rdCol"],
+                ["1st12", "2nd12", "3rd12"],
+                [" ", "1stCol", " ", "2ndCol", " ", "3rdCol"],
                 ["0", "0-00", "00"],
                 ["FiveNumberBet"],
                 ["S1-3", "1🟥", "1-2", "2⬛️", "2-3", "3🟥"],
