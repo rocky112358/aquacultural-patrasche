@@ -157,7 +157,6 @@ class Roulette:
                         if number not in ['00'] and int(number) not in range(37):
                             odd = 0
                         else:
-                            field_list = [field_list]
                             odd = 35
                     if not field_list or odd == 0:
                         print(f"[-] invalid bet | {field_list}")
