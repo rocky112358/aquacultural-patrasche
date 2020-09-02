@@ -152,12 +152,12 @@ class Roulette:
                         field_list = bet_field.split("-")
                         odd = 17
                     elif re.match(r"^(\d+)", bet_field):
-                        field_list = re.match(r"^(\d+)", bet_field)[0]
-                        if field_list not in ['00'] and int(field_list) not in range(37):
-                            print(f"[-] invalid bet | {field_list}")
-                            field_list = []
+                        field_list = re.findall(r"^(\d+)", bet_field)
+                        number = field_list[0]
+                        if number not in ['00'] and int(number) not in range(37):
                             odd = 0
                         else:
+                            field_list = [field_list]
                             odd = 35
                     if not field_list or odd == 0:
                         print(f"[-] invalid bet | {field_list}")
