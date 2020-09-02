@@ -157,7 +157,7 @@ class Roulette:
                         print(f"[-] invalid bet | {field_list}")
                     field_str = []
                     for each in field_list:
-                        field_str += str(each)
+                        field_str.append(str(each))
                     print(f"[+] {field_str} | {odd} to 1")
                     bot.send_message(update.message.chat.id,
                                      f"Bet {update.message.text}",
