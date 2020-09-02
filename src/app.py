@@ -189,8 +189,8 @@ lottery_balance_handler = CommandHandler(['ba', 'bal', 'balance'], daily_lottery
 lottery_stat_handler = CommandHandler(['s', 'stat'], daily_lottery.print_lottery_stat)
 
 roulette_bet_entrypoint = CommandHandler(['bet'], roulette.bet)
-roulette_bet_handler = Handler(roulette.bet)
-roulette_bet_end = Handler(roulette.bet_end)
+roulette_bet_handler = MessageHandler(Filters.reply, roulette.bet)
+roulette_bet_end = MessageHandler(Filters.reply, roulette.bet)
 roulette_bet_conv_handler = ConversationHandler([roulette_bet_entrypoint],
                                                 {"betting": [roulette_bet_handler], "end": [roulette_bet_end]},
                                                 [roulette_bet_end])
