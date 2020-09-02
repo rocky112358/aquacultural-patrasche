@@ -1,5 +1,6 @@
 import os
 import random
+import re
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -36,54 +37,7 @@ class Roulette:
 
     @staticmethod
     def _pay(number):
-        if number in ["0", "00"]:
-            pass
-            return  # pay 0, 00, 0-00, FiveNumberBet
-        number = int(number)
-        ## pay 1 to 1
-        # even / odd
-        if number % 2 == 0:
-            pass  # pay even
-        else:
-            pass  # pay odd
-        # red / black:
-        if number in red:
-            pass  # pay red
-        else:
-            pass  # pay black
-        # upper / lower:
-        if number >= 19:
-            pass  # pay upper
-        else:
-            pass  # pay lower
-
-        ## pay 2 to 1
-        # dozen
-        if 1 <= number <= 12:
-            pass  # pay 1st12
-        elif 13 <= number <= 25:
-            pass  # pay 2nd12
-        else:
-            pass  # pay 3rd12
-        # column
-        if number % 3 == 1:
-            pass  # pay 1stCol
-        elif number % 3 == 2:
-            pass  # pay 2ndCol
-        else:
-            pass  # pay 3rdCol
-
-        ## pay 5 to 1
-        # if number >= 4 and () <= number <= ():
-        #     pass  # pay upper 6
-        # if number <= 33 and () <= number <= ():
-        #     pass  # pay lower 6
-
-        ## pay 6 to 1
-        # if number in [1, 2, 3]:
-        #     pass  # pay FiveNumberBet
-
-        ## pay 8 to 1
+        pass
 
     @staticmethod
     def _pick_number():
@@ -141,6 +95,70 @@ class Roulette:
                                      reply_to_message_id=update.message.message_id,
                                      reply_markup=keyboard)
                 else:
+                    bet_field = update.message.text
+                    field_list = []
+                    if bet_field == "EVEN":
+                        field_list = list(range(2, 37, 2))
+                        odd = 1
+                    elif bet_field == "ODD":
+                        field_list = list(range(1, 36, 2))
+                        odd = 1
+                    elif "BLACK" in bet_field:
+                        field_list = black
+                        odd = 1
+                    elif "RED" in bet_field:
+                        field_list = red
+                        odd = 1
+                    elif bet_field == "1to18":
+                        field_list = list(range(1, 19))
+                        odd = 1
+                    elif bet_field == "19to36":
+                        field_list = list(range(19, 37))
+                        odd = 1
+                    elif bet_field == "1st12":
+                        field_list = list(range(1, 13))
+                        odd = 2
+                    elif bet_field == "2nd12":
+                        field_list = list(range(13, 25))
+                        odd = 2
+                    elif bet_field == "3rd12":
+                        field_list = list(range(25, 37))
+                        odd = 2
+                    elif bet_field == "1stCol":
+                        field_list = list(range(1, 37, 3))
+                        odd = 2
+                    elif bet_field == "2ndCol":
+                        field_list = list(range(2, 37, 3))
+                        odd = 2
+                    elif bet_field == "3rdCol":
+                        field_list = list(range(3, 37, 3))
+                        odd = 2
+                    elif bet_field[0] == "C":  # six line bet
+                        field_range = bet_field[1:].split("-")
+                        field_list = list(range(int(field_range[0]), int(field_range[1]) + 1))
+                        odd = 5
+                    elif bet_field == "FiveNumberBet":
+                        field_list = ["0", "00", "1", "2", "3"]
+                        odd = 6
+                    elif len(bet_field.split("-")) == 4:  # corner bet
+                        field_list = bet_field.split("-")
+                        odd = 8
+                    elif bet_field[0] == "S":  # street bet
+                        field_range = bet_field[1:].split("-")
+                        field_list = list(range(int(field_range[0]), int(field_range[1]) + 1))
+                        odd = 11
+                    elif len(bet_field.split("-")) == 2:
+                        field_list = bet_field[1:].split("-")
+                        odd = 17
+                    elif re.match(r"^(\d+)", bet_field):
+                        field_list = re.match(r"^(\d+)", bet_field)
+                        odd = 35
+                    else:
+                        print(f"[-] invalid bet | {field_list}")
+                    field_str = []
+                    for each in field_list:
+                        field_str += str(each)
+                    print(f"[+] {field_str} | {odd} to 1")
                     bot.send_message(update.message.chat.id,
                                      f"Bet {update.message.text}",
                                      reply_to_message_id=update.message.message_id,
