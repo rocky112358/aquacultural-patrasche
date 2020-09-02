@@ -132,7 +132,7 @@ class Roulette:
                 bot.send_message(update.message.chat.id,
                                  "Good luck!",
                                  reply_to_message_id=update.message.message_id,
-                                 reply_markup=telegram.ReplyKeyboardRemove)
+                                 reply_markup=telegram.ReplyKeyboardRemove())
                 return ConversationHandler.END
             else:
                 if update.message.text == '/bet':
