@@ -4,6 +4,7 @@ import random
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 import telegram
+from telegram.ext import ConversationHandler
 
 from models.daily_lottery import User, BuyLog
 
@@ -133,16 +134,10 @@ class Roulette:
                                      f"Bet {update.message.text}",
                                      reply_to_message_id=update.message.message_id,
                                      reply_markup=keyboard)
-                bot.send_message(update.message.chat.id,
-                                 "Bet down, please.",
-                                 reply_to_message_id=update.message.message_id,
-                                 reply_markup=keyboard)
                 return "betting"
             else:
-                return "end"
-
-    def bet_end(self, update, context):
-        bot.send_message(update.message.chat.id,
-                         "Good luck!",
-                         reply_to_message_id=update.message.message_id,
-                         reply_markup=telegram.ReplyKeyboardRemove)
+                bot.send_message(update.message.chat.id,
+                                 "Good luck!",
+                                 reply_to_message_id=update.message.message_id,
+                                 reply_markup=telegram.ReplyKeyboardRemove)
+                return ConversationHandler.END
