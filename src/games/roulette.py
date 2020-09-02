@@ -148,10 +148,10 @@ class Roulette:
                         field_list = list(range(int(field_range[0]), int(field_range[1]) + 1))
                         odd = 11
                     elif len(bet_field.split("-")) == 2:
-                        field_list = bet_field[1:].split("-")
+                        field_list = bet_field.split("-")
                         odd = 17
                     elif re.match(r"^(\d+)", bet_field):
-                        field_list = re.match(r"^(\d+)", bet_field)
+                        field_list = re.match(r"^(\d+)", bet_field)[0]
                         odd = 35
                     else:
                         print(f"[-] invalid bet | {field_list}")
