@@ -97,6 +97,7 @@ class Roulette:
                 else:
                     bet_field = update.message.text
                     field_list = []
+                    odd = 0
                     if bet_field == "EVEN":
                         field_list = list(range(2, 37, 2))
                         odd = 1
@@ -152,15 +153,21 @@ class Roulette:
                         odd = 17
                     elif re.match(r"^(\d+)", bet_field):
                         field_list = re.match(r"^(\d+)", bet_field)[0]
-                        odd = 35
-                    else:
+                        if field_list not in ['00'] and int(field_list) not in range(37):
+                            print(f"[-] invalid bet | {field_list}")
+                            field_list = []
+                            odd = 0
+                        else:
+                            odd = 35
+                    if not field_list or odd == 0:
                         print(f"[-] invalid bet | {field_list}")
-                    field_str = []
-                    for each in field_list:
-                        field_str.append(str(each))
-                    print(f"[+] {field_str} | {odd} to 1")
-                    bot.send_message(update.message.chat.id,
-                                     f"Bet {update.message.text}",
-                                     reply_to_message_id=update.message.message_id,
-                                     reply_markup=keyboard)
+                    else:
+                        field_str = []
+                        for each in field_list:
+                            field_str.append(str(each))
+                        print(f"[+] {field_str} | {odd} to 1")
+                        bot.send_message(update.message.chat.id,
+                                         f"Bet {update.message.text}",
+                                         reply_to_message_id=update.message.message_id,
+                                         reply_markup=keyboard)
                 return "betting"
